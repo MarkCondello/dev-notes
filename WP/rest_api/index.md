@@ -17,7 +17,7 @@ axios.get('/wp-json/wp/v2/pages?search=SOME_PAGE_TITLE&_fields=id,title.link')
 ## Endpoints
 A list of all the endpoints available can be found [here](https://developer.wordpress.org/rest-api/reference/#rest-api-developer-endpoint-reference)
 
-##CRUD operations
+## CRUD operations
 While making GET requests is simple with the REST API, the other CRUD operations require authentication.
 
 We can install the [Basic Auth plugin](https://github.com/WP-API/Basic-Auth) to allow us to pass username and password details for local or SSL secured websites.
