@@ -14,8 +14,8 @@ In order to have a plugin registered with the WP system, the following comments 
 ## Adding the admin menu
 It is best practice to use a class to avoid naming collisions with other plugins and WP's internal functions.
 There are 2 main WP functions used to set up an admin menu page.
- - [admin_menu](https://developer.wordpress.org/reference/hooks/admin_menu/)
- - [add_options_page](https://developer.wordpress.org/reference/functions/add_options_page/)
+ - [admin_menu()](https://developer.wordpress.org/reference/hooks/admin_menu/)
+ - [add_options_page()](https://developer.wordpress.org/reference/functions/add_options_page/)
 
 In the demo below we use a unique class name and instantiate it. 
 The constructor calls the admin_menu action which runs the callback to set up the menu page using the add_options_page helper function. See the documentation for add_options_page() for the options it provides.
@@ -45,7 +45,18 @@ $wordCountAndTimePlugin = new WordCountAndTimePlugin();
 
 ## Saving Settings
 All plugin settings are stored in the wp_options table.
+
+These WP functions listed are used in the update to the plugin below and are used to add settings, include settings to the options.php form  and validate inputs:
+  - [add_settings_section()](https://developer.wordpress.org/reference/functions/add_settings_section/)
+  - [add_settings_field()](https://developer.wordpress.org/reference/functions/add_settings_field/)
+  - [register_settings()](https://developer.wordpress.org/reference/functions/register_setting/)
+  - [register_settings()](https://developer.wordpress.org/reference/functions/register_setting/)
+  - [settings_fields()](https://developer.wordpress.org/reference/functions/settings_fields/)
+  - [settings_fields()](https://developer.wordpress.org/reference/functions/settings_fields/)
+  - [do_settings_sections()](https://developer.wordpress.org/reference/functions/do_settings_sections/)
+
 In the code example below, we've added another action to the construct() method which includes the settings on the *word-count-settings* page created earlier.
+
 Comments for various sections have been included in the code example below:
 ```
  public function __construct() {
