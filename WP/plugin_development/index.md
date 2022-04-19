@@ -1,5 +1,5 @@
 ## Register the plugin
-In order to have a plugin registered with the WP system is to add the following required comments:
+In order to have a plugin registered with the WP system, the following comments with the relevant details are required:
 
 ```
 /*
@@ -45,7 +45,8 @@ $wordCountAndTimePlugin = new WordCountAndTimePlugin();
 
 ## Saving Settings
 All plugin settings are stored in the wp_options table.
-
+In the code example below, we've added another action to the construct() method which includes the settings on the *word-count-settings* page created earlier.
+Comments for various sections have been included in the code example below:
 ```
  public function __construct() {
    ...
@@ -53,9 +54,9 @@ All plugin settings are stored in the wp_options table.
   }
   public function settings() {
 
-   add_settings_section('wcp_first_section', 'A place where the meta information will be displayed.', null, 'word-count-settings');
+    add_settings_section('wcp_first_section', 'A place where the meta information will be displayed.', null, 'word-count-settings');
    
-   add_settings_field('wcp_location', 'Display Location', [$this, 'LocationHTML'], 'word-count-settings', 'wcp_first_section');
+    add_settings_field('wcp_location', 'Display Location', [$this, 'LocationHTML'], 'word-count-settings', 'wcp_first_section');
 
     register_setting('word_count_plugin', 'wcp_location', 
     [
@@ -64,10 +65,10 @@ All plugin settings are stored in the wp_options table.
     ]);
   }
   public function locationHTML() { ?>
-  <select name="wcp_location"><!-- The name provided for the field is the same that was used in the WP add_settings_field() helper function -->
-    <option value="0">Top</option>
-    <option value="1">Bottom</option>
-  </select>
+    <select name="wcp_location"><!-- The name provided for the field is the same that was used in the WP add_settings_field() helper function -->
+      <option value="0">Top</option>
+      <option value="1">Bottom</option>
+    </select>
 <?php
   }
   ...
@@ -87,5 +88,5 @@ All plugin settings are stored in the wp_options table.
   }
   ```
 
-With the single section in place with the options input added to the form, we can save values to the wp_options table. 
-Currently those settings are not recorded in the form.
+With the single settings section in place which holds the select options input added to the form, we can save values to the wp_options table.
+Currently those settings are not recorded in the form when we reload the page.
