@@ -101,3 +101,82 @@ Comments for various sections have been included in the code example below:
 
 With the single settings section in place which holds the select options input added to the form, we can save values to the wp_options table.
 Currently those settings are not recorded in the form when we reload the page.
+
+## Retrieving saved settings and adding extra fields
+
+We can retrieve the saved values using WP's helper function get_option() and add that value to the inputs we create.
+
+The list of WP functions added with the update below are listed:
+- [get_option()](https://developer.wordpress.org/reference/functions/get_option/)
+- [selected()](https://developer.wordpress.org/reference/functions/selected/)
+- [checked()][https://developer.wordpress.org/reference/functions/checked/]
+
+The update to retrieve the values stored for the wcp_location field is below:
+```
+public function locationHTML() { ?>
+  <select name="wcp_location">
+    <option value="0" <?php selected(get_option('wcp_location'), '0') ?>>Top</option>
+    <option value="1" <?php selected(get_option('wcp_location'), '1') ?>>Bottom</option>
+  </select>
+<?php
+  }
+```
+
+We can now roll out additional fields using a similar structure to what was already created by copying the add_settings_field() and the register_setting() functions.
+
+See the update for a input text field below:
+
+```
+ public function settings() {
+    ...
+    add_settings_field('wcp_headline', 'Headline Text', [$this, 'headlineHTML'], 'word-count-settings', 'wcp_first_section');
+    register_setting('word_count_plugin', 'wcp_headline', 
+    [
+      'sanitize_callback' => 'sanitize_text_field', // WP's santize function
+      'default' => 'Post Statistics'
+    ]);
+  }
+  ...
+    public function headlineHTML() { ?>
+  <input type="text" name="wcp_headline" value="<?= esc_attr(get_option('wcp_headline')) ?>" placeholder="The headline for the meta info.">
+  <?php
+  }
+```
+
+Very similar to the selected() WP function, we can use the checked() WP function for checkboxes and radio buttons. This function sets the value to *on* if checked and null if not.
+
+```
+  public function wordCountHTML() { ?>
+    <input type="checkbox" name="wcp_word_count" <?php checked(get_option('wcp_word_count'), 'on') ?>>
+    <?php
+  }
+```
+
+## Custom field sanitization
+
+Instead of using the *sanitize_text_field* provided by WP, we can specify a method to check the value entered is valid.
+
+In this example we check if the *wcp_location* input has a value of either '0' or '1'
+
+```
+public function settings () 
+{
+  ...
+   register_setting('word_count_plugin', 'wcp_location', 
+    [
+      'sanitize_callback' => [$this, 'sanitizeLocation'], // custom santize method
+      'default' => '0'
+    ]);
+  ...
+}
+...
+public function sanitizeLocation($input) {
+  if(!$input !== '0' && !$input !== '1') {
+    add_settings_error('wcp_location', 'wcp_location_error', 'Display location must be Top or Bottom.');
+    return get_option('wcp_location');
+  }
+  return $input;
+}
+```
+
+This custom method retrieves the input value as a paramter and we can check the value is what is expected. If it is not, we return with the original value, if it is, we persist it in the database.
