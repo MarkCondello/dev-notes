@@ -437,3 +437,32 @@ class ReplaceWordsFilter {
 
 $replaceWordsFilter = new ReplaceWordsFilter();
 ```
+
+## Loading custom icons and styles
+
+Leveraging the WP *do_action("load-{$page_hook}")* action, which fires off a callback before the specified page is loaded; we can enqueue the styles we want for specific menu pages.
+
+By assigning the value returned from the menu pages created with add_submenu_page() and add_submenu_page(); we can run code for those pages.
+
+**The var_dump() included shows the string WP uses to allow us to use the hook mentioned.**
+
+The following WP functions were used in the code example below:
+ - [do_action("load-{$page_hook}")](https://developer.wordpress.org/reference/hooks/load-page_hook/#source)
+ - [wp_enqueue_style]()
+
+ Instead of using dashicons, we can also provide a path to an svg or image file instead.
+
+ ```
+  public function menuPage()
+  {
+    $mainMenuHook = add_menu_page('Words to Filter', 'Replace Words Filter', 'manage_options', 'replace-word-filter', [$this, 'replaceWordFilterPage'], plugin_dir_url(__FILE__) . '/assets/imgs/icons/filter.svg', 12);
+    // add_menu_page('Words to Filter', 'Replace Words Filter', 'manage_options', 'replace-word-filter', [$this, 'replaceWordFilterPage'], 'dashicons-format-quote', 12);
+    var_dump($mainMenuHook);
+    ...
+    add_action("load-{$mainMenuHook}", [$this, 'mainPageAssets']);
+  }
+   public function mainPageAssets()
+  {
+    wp_enqueue_style('filterAdminCss', plugin_dir_url(__FILE__) .'/assets/css/main.css');
+  }
+```
