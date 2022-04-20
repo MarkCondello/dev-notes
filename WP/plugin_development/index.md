@@ -43,6 +43,8 @@ class WordCountAndTimePlugin {
 $wordCountAndTimePlugin = new WordCountAndTimePlugin();
 ```
 
+***The code `[$this, 'CLASS_METHOD']` in the hook functions eg(`add_HOOK_NAME('HOOK_FUNCTION', [$this, 'CLASS_METHOD'])`) is how we can provide a reference to the *this* instance to the WP function so WP knows where to find the class method. ***
+
 ## Saving Settings
 All plugin settings are stored in the wp_options table.
 
@@ -109,7 +111,7 @@ We can retrieve the saved values using WP's helper function get_option() and add
 The list of WP functions added with the update below are listed:
 - [get_option()](https://developer.wordpress.org/reference/functions/get_option/)
 - [selected()](https://developer.wordpress.org/reference/functions/selected/)
-- [checked()][https://developer.wordpress.org/reference/functions/checked/]
+- [checked()](https://developer.wordpress.org/reference/functions/checked/)
 
 The update to retrieve the values stored for the wcp_location field is below:
 ```
@@ -171,7 +173,7 @@ public function settings ()
 }
 ...
 public function sanitizeLocation($input) {
-  if(!$input !== '0' && !$input !== '1') {
+  if($input !== '0' && $input !== '1') {
     add_settings_error('wcp_location', 'wcp_location_error', 'Display location must be Top or Bottom.');
     return get_option('wcp_location');
   }
@@ -180,3 +182,52 @@ public function sanitizeLocation($input) {
 ```
 
 This custom method retrieves the input value as a paramter and we can check the value is what is expected. If it is not, we return with the original value, if it is, we persist it in the database.
+
+# Displaying changes on the Front End
+
+In order to apply the settings changes to the front end, we can use a [filter called *the_content*](https://developer.wordpress.org/reference/hooks/the_content/). In the example below, we check of the the current page is a post show page and if it is running the main WP_Query() before presenting the plugin settings content selected.
+
+```
+ public function __construct() 
+  {
+    ...
+    add_filter('the_content', [$this, 'ifWrap']);
+  }
+   public function ifWrap($content)
+  {
+    if(is_single() && is_main_query() &&
+        (
+          get_option('wcp_word_count', '1') ||
+          get_option('wcp_character_count', 'on') ||
+          get_option('wcp_read_time', 'on')
+        )
+      ) {
+      return $this->frontEndHTML($content);
+    }
+    return $content;
+  }
+  public function frontEndHTML($content)
+  {
+    $html = '<h3>' . esc_html(get_option('wcp_headline', 'Post Meta')) .'</h3>';
+    if (get_option('wcp_word_count', 'on') == 'on' || get_option('wcp_read_time', 'on') == 'on') {
+      $wordCount = str_word_count(strip_tags($content));
+    }
+    if (get_option('wcp_word_count', 'on') == 'on') {
+      $html .= '<p>This post has ' . $wordCount . ' words.</p>';
+    }
+    if (get_option('wcp_character_count', 'on') == 'on') {
+      $html .= '<p>This post has ' . strlen(strip_tags($content)) . ' characters.</p>';
+    }
+    if (get_option('wcp_read_time', 'on') == 'on') {
+      $timeToRead = round(($wordCount/225), 2);
+      $html .= '<p>This post takes approx '.$timeToRead .' minute(s) to read.</p>';
+    }
+    if (get_option('wcp_location', '0') === '0') {
+      return $html . $content;
+    }
+    return $content . $html;
+  }
+  ...
+```
+
+** Note:** we are using esc_html() in case meliscious code is added to the headline content. 
