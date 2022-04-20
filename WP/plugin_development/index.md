@@ -448,7 +448,7 @@ By assigning the value returned from the menu pages created with add_submenu_pag
 
 The following WP functions were used in the code example below:
  - [do_action("load-{$page_hook}")](https://developer.wordpress.org/reference/hooks/load-page_hook/#source)
- - [wp_enqueue_style]()
+ - [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/)
 
  Instead of using dashicons, we can also provide a path to an svg or image file instead.
 
@@ -466,3 +466,55 @@ The following WP functions were used in the code example below:
     wp_enqueue_style('filterAdminCss', plugin_dir_url(__FILE__) .'/assets/css/main.css');
   }
 ```
+
+## Including a custom form
+
+Instead of using the WP functions like settings_fields() and do_settings_sections() *see previous plugin example* to generate a form, we can instead create our own custom form which uses PHP's $_POST variables and WP's nonce functions instead.
+
+In the example code below, we check if the $_POST variabled of *'just_submitted'* is set and if it is, we process the form and perform a nonce validation to prevent CSRF attacks.
+
+The following WP functions were used in the code example below:
+ - [wp_nonce_field()](https://developer.wordpress.org/reference/functions/wp_nonce_field/)
+  - [wp_verify_nonce()](https://developer.wordpress.org/reference/functions/wp_verify_nonce/)
+  - [sanitize_text_field()](https://developer.wordpress.org/reference/functions/sanitize_text_field/)
+
+```
+ public function replaceWordFilterPage()
+  { ?>
+    <div id="replace-words-main-page" class="wrap">
+      <h1>Replace Words Filter.</h1>
+      <?php if($_POST['just_submitted']) $this->handleForm() ?>
+      <form method="POST" method="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+        <input type="hidden" name="just_submitted" value="true" />
+        <?php wp_nonce_field('saveFilterWords', 'rwfNonce') ?>
+        <label for="words_to_replace">
+          <p>Enter a comma-seperated list of the words to replace.</p>
+        </label>
+        <div class="container">
+          <textarea name="words_to_replace" id="words_to_replace"><?= esc_html( get_option('words_to_replace', null)); ?></textarea>
+        </div>
+        <input type="submit" id="submit" class="button button-primary" value="Save Filter Changes">
+      </form>
+    </div>
+    <?php
+  }
+  public function handleForm()
+  {
+    if (wp_verify_nonce($_POST['rwfNonce'], 'saveFilterWords') && current_user_can('manage_options')){
+      update_option('words_to_replace', sanitize_text_field($_POST['words_to_replace']));
+      ?>
+      <div class="updated"><p>Your filtered words were saved...</p></div>
+      <?php
+    } else {
+      ?>
+      <div class="error">
+        <p>Sorry, you do not have permission to perform this action.</p>
+      </div>
+      <?php
+    }
+  }
+```
+
+** Note: ** We are checkibg the nonce value stored in the WP generated hidden field by referencing the name we set called *'rwfNonce'*. 
+If this nonce is valid and the user can *'manage_options'*, then we persist the form.
+Otherwise, we provide an error message.
