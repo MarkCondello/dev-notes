@@ -82,3 +82,51 @@ function onAdminRefresh() {
   );
 }
 ```
+
+## Loading a custom template from the plugin
+
+In order to load a template from our plugin we can use the ['template_include' filter](https://developer.wordpress.org/reference/hooks/template_include/). This hook tells wordpress to load a specific template for a specific page url.
+
+```
+public function __construct()
+{
+  ...
+  add_filter('template_include', [$this, 'loadTemplate'], 99);
+  ...
+}
+...
+public function loadTemplate()
+{
+  if (is_page('custom-sql-table-example')) {
+    return plugin_dir_path(__FILE__) . 'inc/template-pets.php';
+  }
+  return $template;
+}
+```
+
+## Querying the custom table
+
+In the template loaded for the predetermined page url (details above), we can use the *global $wpdb* object to make queries to SQL.
+
+```
+<?php 
+  global $wpdb;
+  $tableName = $wpdb->prefix . 'pets';
+  $petsQuery = $wpdb->prepare("SELECT * FROM $tableName WHERE `species` = %s AND `birthyear` > %d ORDER BY `birthyear` ASC LIMIT 10;", 
+  [
+    'dog',
+    2018
+  ]);
+  $pets = $wpdb->get_results($petsQuery);
+  // echo "<pre>";
+  // var_dump($pets);
+  // echo "</pre>";
+?>
+```
+
+Using the prepare statement allows us to add placeholders which will be sanitized if user inputs are being provided to modify the query.
+
+The prepare query allows for prepared statements and placeholders for string or integer values.`%s for strings, %d for digits / integers`
+The array second parameter is used to fill in the placeholder values.
+
+
