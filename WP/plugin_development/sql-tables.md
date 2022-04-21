@@ -85,7 +85,7 @@ function onAdminRefresh() {
 
 ## Loading a custom template from the plugin
 
-In order to load a template from our plugin we can use the ['template_include' filter](https://developer.wordpress.org/reference/hooks/template_include/). This hook tells wordpress to load a specific template for a specific page url.
+In order to load a template from our plugin we can use the ['template_include' filter](https://developer.wordpress.org/reference/hooks/template_include/). In this example we use this hooks callback function *loadTemplate* to load a specific template based on a specific page url.
 
 ```
 public function __construct()
