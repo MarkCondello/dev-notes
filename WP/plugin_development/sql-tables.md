@@ -42,9 +42,9 @@ class PetAdoptionTablePlugin {
       id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
       birthyear smallint(5) NOT NULL DEFAULT 0,
       petweight smallint(5) NOT NULL DEFAULT 0,
+      favcolor varchar(60) NOT NULL DEFAULT '',
       favfood varchar(60) NOT NULL DEFAULT '',
       favhobby varchar(60) NOT NULL DEFAULT '',
-      favcolor varchar(60) NOT NULL DEFAULT '',
       petname varchar(60) NOT NULL DEFAULT '',
       species varchar(60) NOT NULL DEFAULT '',
       PRIMARY KEY  (id)
@@ -54,3 +54,30 @@ class PetAdoptionTablePlugin {
 *We can check that this 'pets' table gets created by activating the plugin.*
 ___
 
+In our constructor we have included the *admin_head* action hook. This will fire off its callback called *onAdminRefresh()* whenever the admin is reloaded.
+
+The onAdminRefresh() callback inserts data into the *pets* table using the $wpdb global object.
+
+```
+public function __construct()
+{
+  ...
+  add_action('admin_head', [$this, 'onAdminRefresh']);
+}
+...
+function onAdminRefresh() {
+  global $wpdb;
+  $wpdb->insert(
+    $this->tableName,
+    [
+      'birthyear' => rand(2006, 2021),
+      'petweight' => rand(1, 100),
+      'favcolor' => 'Poo',
+      'favfood' => 'Poo',
+      'favhobby' => 'Poo',
+      'petname' => 'Haggis',
+      'species' => 'retard shitsu'
+    ]
+  );
+}
+```
