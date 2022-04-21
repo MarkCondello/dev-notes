@@ -50,6 +50,7 @@ class PetAdoptionTablePlugin {
       PRIMARY KEY  (id)
     ) $this->charset;");
   }
+```
 
 *We can check that this 'pets' table gets created by activating the plugin.*
 ___
