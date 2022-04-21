@@ -515,6 +515,79 @@ The following WP functions were used in the code example below:
   }
 ```
 
-** Note: ** We are checkibg the nonce value stored in the WP generated hidden field by referencing the name we set called *'rwfNonce'*. 
+** Note: ** We are checking the nonce value stored in the WP generated hidden field by referencing the name we set called *'rwfNonce'*. 
 If this nonce is valid and the user can *'manage_options'*, then we persist the form.
 Otherwise, we provide an error message.
+
+We can remove the nonce key value on the front end to simulate an un-sanitized form request which will produce the error message.
+
+## Including replacement word and updating Front End
+
+In order to change the content on the front end, we tap onto the *'the_content'* filter.
+In the example code below we are doing a find and replace for the words_to_replace and replacing it with *"***"* as a placeholder.
+
+```
+ public function __construct()
+  {
+  ...
+    add_filter('the_content', [$this, 'filterLogic']);
+  }
+  ...
+    public function filterLogic($content)
+  {
+    if (get_option('words_to_replace')) {
+      $targetWords = explode(',', get_option('words_to_replace'));
+      $trimmedTargetWords = array_map('trim', $targetWords); //'trim '
+      return str_ireplace($trimmedTargetWords, '***', $content);
+    }
+    return $content;
+  }
+```
+
+The form which determines what to replace the words with in the sub menu page is similar to what was acheived in the previous form example in the parent menu page.
+
+```
+ public function replaceWordFilterOptionsPage()
+  { ?>
+    <div class="wrap">
+      <h1>Replace Word Filter options.</h1>
+      <?php if($_POST['replacement_form_submitted']) $this->handleReplacementForm() ?>
+      <form method="POST" action="<?= $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ?>">
+        <input type="hidden" name="replacement_form_submitted" value="true" >
+      <?php wp_nonce_field('saveReplacementWord', 'rwfSubNonce');
+      ?>
+        <label for="replacement_word">
+          <p>Enter a word to replace the targeted words.</p>
+        </label>
+        <div class="container">
+          <input name="replacement_word" id="replacement_word" value="<?= esc_html( get_option('replacement_word', null)); ?>">
+        </div>
+        <p>Leave blank to simply remove the replacement words.</p>
+        <input type="submit" id="submit" class="button button-primary" value="Save Replacement Word">
+      </form>
+    </div>
+    <?php
+  }
+  public function handleReplacementForm()
+  {
+    if (wp_verify_nonce($_POST['rwfSubNonce'], 'saveReplacementWord') && current_user_can('manage_options')){
+      update_option('replacement_word', sanitize_text_field($_POST['replacement_word']));
+      ?>
+      <div class="updated"><p>Your replacement word was saved...</p></div>
+      <?php
+    } else {
+      ?>
+      <div class="error">
+        <p>Sorry, you do not have permission to perform this action.</p>
+      </div>
+      <?php
+    }
+  }
+```
+
+With the replacement_word option field storing in the wp_options table, we can now change the *"***"* to whatever is saved in the database table in the filterLogic() method.
+
+```
+ $replacementWord = esc_html( get_option('replacement_word', null));
+  return str_ireplace($trimmedTargetWords, $replacementWord, $content);
+  ```
