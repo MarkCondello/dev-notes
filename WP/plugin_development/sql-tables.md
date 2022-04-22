@@ -129,4 +129,49 @@ Using the prepare statement allows us to add placeholders which will be sanitize
 The prepare query allows for prepared statements and placeholders for string or integer values.`%s for strings, %d for digits / integers`
 The array second parameter is used to fill in the placeholder values.
 
+## Posting to custom tables on Front End
 
+In order for us to process form POST requests from the front end, we need to use a dynamically named action hook called *admin_post_{ACTION_INPUT_VALUE}*.
+
+The other requirement to send POST request is to include the admin-post.php in the action value eg `action="<?= esc_url(admin_url('admin-post.php')) ?>"`.
+
+A hidden input named "action" creates a hook for us to reference by the value eg add_pet.
+
+The admin-post.php script will recognise the action value and provide a hook for us to leverage when the form is submitted.
+
+```
+<!-- Front End Template -->
+  <?php 
+    if (current_user_can('administrator')) { ?>
+    <form action="<?= esc_url(admin_url('admin-post.php')) ?>" class="create-pet-form" method="POST">
+      <label for="pet_name">Enter just the name for a pet. Its species, weight and other details will be generated.</label>
+      <div>
+        <input type="hidden" name="action" value="add_pet">
+        <input type="text" name="pet_name" placeholder="Joe Bloggs">
+        <button type="submit" value="" class="">Add pet</button>
+      </div>
+    </form>
+<?php
+```
+By sending the action input in the payload, we can use that inputs value to use the *admin_post_{INPUT_VALUE}* and catch the values in the post request with the $_POST superglobal and persist the values in our plugin file.
+```
+<!-- Plugin -->
+ function __construct() {
+   ...
+  add_action('admin_post_add_pet', [$this, 'handlePost']);
+  add_action('admin_post_nopriv_add_pet', [$this, 'handlePost']); // no privledges
+  }
+  ...
+    public function handlePost()
+  {
+    if (current_user_can('administrator')) {
+      $pet = generatePet();
+      $pet['petname']= sanitize_text_field($_POST['pet_name']);
+      global $wpdb;
+      $wpdb->insert($this->tableName, $pet);
+      wp_redirect(site_url('/custom-sql-table-example'));
+    } else {
+      wp_redirect(site_url());
+    }
+  }
+```
