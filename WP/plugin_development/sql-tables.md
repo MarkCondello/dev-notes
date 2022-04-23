@@ -154,6 +154,13 @@ The admin-post.php script will recognise the action value and provide a hook for
 <?php
 ```
 By sending the action input in the payload, we can use that inputs value to use the *admin_post_{INPUT_VALUE}* and catch the values in the post request with the $_POST superglobal and persist the values in our plugin file.
+
+The following WP functions were used in the code example below:
+
+- [current_user_can()](https://developer.wordpress.org/reference/functions/current_user_can/)
+- [wp_redirect()](https://developer.wordpress.org/reference/functions/wp_redirect/)
+- [site_url()](https://developer.wordpress.org/reference/functions/site_url/)
+
 ```
 <!-- Plugin -->
  function __construct() {
@@ -175,3 +182,75 @@ By sending the action input in the payload, we can use that inputs value to use 
     }
   }
 ```
+
+## Deleting a row from the Front End
+
+Deleting rows from the front end is similar to the previous 2 steps.
+We create the form with the hidden action field that includes a custom value and add *admin-post.php* to the form action.
+We catch that POST request with the hook provided and delegate the handling of that request to a method or function.
+
+The main difference is with the SQL statement which deletes the specific row:
+```
+  function __construct() {
+    ...
+    add_action('admin_post_delete_pet', [$this, 'handleDelete']);
+    add_action('admin_post_nopriv_delete_pet', [$this, 'handleDelete']); // no privledges
+  }
+  public function handleDelete()
+  {
+    if (current_user_can('administrator')) {
+      global $wpdb;
+      $wpdb->delete($this->tableName, [ 'id' => sanitize_text_field($_POST['pet_id']) ]);
+      $this->message = "The pet {$_POST['pet_name']} has been deleted.";
+      wp_redirect(site_url("/custom-sql-table-example?message=$this->message"));
+    } else {
+      wp_redirect(site_url());
+    }
+  }
+```
+
+## Setting up Edit route
+```
+  function __construct() {
+    ...
+    // Edit route updates
+    add_action('init', function() {
+      add_rewrite_rule('edit-pet/([0-9]+)[/]?$', 'index.php?pet=$matches[1]', 'top');
+    });
+    // tell WP that the pet is an acceptable query var
+    add_filter('query_vars', function($query_vars){
+      $query_vars[] = 'pet';
+      return $query_vars;
+    });
+    add_action('template_include', function($template){
+      $this->petId = null;
+      if (get_query_var('pet') == false || get_query_var('pet') == '' ) {
+        return $template;
+      }
+      $this->petId = get_query_var('pet');
+      var_dump($this->petId); // DOES NOT PROVIDE THE PET ID PASSED IN
+      return plugin_dir_path(__FILE__) .'/inc/template-edit-pet.php'; // the template has a form which sends a POST request 
+    });
+
+    add_action('admin_post_edit_pet', [$this, 'handleEdit']);
+    add_action('admin_post_nopriv_edit_pet', [$this, 'handleEdit']); // no privledges
+  }
+  ...
+  public function handleEdit()
+  {
+    if (current_user_can('administrator') && isset($_POST['petid'])) {
+      $pet['petname']= sanitize_text_field($_POST['petname']);
+      global $wpdb;
+      $petUpdate = $wpdb->prepare("UPDATE $this->tableName
+        SET petname = %s
+        WHERE id = %d;", sanitize_text_field($_POST['petname']), $_POST['petid']
+      );
+      $wpdb->query($petUpdate);
+      wp_redirect(site_url('/custom-sql-table-example?message=The pet '. $_POST["petname"]. ' has been updated...'));
+    } else {
+      wp_redirect(site_url());
+    }
+  }
+```
+
+https://www.youtube.com/watch?v=Wb5yEs5kV5k&t=729s
