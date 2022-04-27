@@ -475,8 +475,8 @@ In the example code below, we check if the $_POST variabled of *'just_submitted'
 
 The following WP functions were used in the code example below:
  - [wp_nonce_field()](https://developer.wordpress.org/reference/functions/wp_nonce_field/)
-  - [wp_verify_nonce()](https://developer.wordpress.org/reference/functions/wp_verify_nonce/)
-  - [sanitize_text_field()](https://developer.wordpress.org/reference/functions/sanitize_text_field/)
+ - [wp_verify_nonce()](https://developer.wordpress.org/reference/functions/wp_verify_nonce/)
+ - [sanitize_text_field()](https://developer.wordpress.org/reference/functions/sanitize_text_field/)
 
 ```
  public function replaceWordFilterPage()
