@@ -71,7 +71,7 @@ class VoteForPost {
 $VoteForPost = new VoteForPost();
 ```
 
-* JS implementation*
+## JS implementation
 For the js implementation, its almost the same but we handle setting the path to the `wp-admin-ajax.php` using a wordpress function called localize script. Its here we can add the path in the site markup:
 `localize('site_script', ['ajaxurl' => admin_url( 'admin-ajax.php' ),]`
 
@@ -80,7 +80,7 @@ Here is the markup used in this demo:
   <button data-nonce="{{ $nonce }}" data-post-id="{{ the_ID() }}" id="user_vote">Vote for this post.</button>
 ```
 
-THen in the JS, we grab the data attributes and and append those values to a FormData object. We also need to pass in the custom *action* name so when the request reaches *wp-admin-ajax.php* we catch that request with the `wp_ajax_user_vote` action in our plugin:
+Then in the JS, we grab the data attributes and and append those values to a FormData object. We also need to pass in the custom *action* name so when the request reaches *wp-admin-ajax.php* we catch that request with the `wp_ajax_user_vote` action in our plugin:
 ```
 const userVoteBtn = document.getElementById('user_vote'),
   voteCounter = document.getElementById('vote_counter');
