@@ -30,3 +30,23 @@ By extending the Page class, a newly created page will nherit all of its propert
 Any time we create a new template, we need to flush the cache, so append ?flush to the URL and reload.
 
 **Anytime there is a namespace change, the templates break even after flushing. The content needs to be recreated in the CMS in order for the template to render properly.**
+
+## Add Customer fields
+In order to add custom fields to a CMS page, we need to create a table where we can store the updated settings.
+We can also include various field types like TextFields, DateFields, Image and File uploaders and more like to `use SilverStripe\Forms\TextField;`.
+
+**LandingPage.php**
+```
+  private static $table_name = 'LandingPage';
+  private static $db = [
+    'BannerTitle' => 'Text'
+  ];
+
+  public function getCMSFields()
+  {
+    $fields = parent::getCMSFields();
+    $fields->addFieldsToTab('Root.Main', TextField::create('BannerTitle', 'Banner title text'));
+    return $fields;
+  }
+```
+Then in the front end, we can retrieve the `$BannerTitle` content stored in the database.
