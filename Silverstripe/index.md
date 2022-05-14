@@ -6,7 +6,7 @@ namespace Silverstripe\Lessons;
 use Page;
 class LandingPage extends Page {}
 ```
-*LandingPageController.php (Controller)
+**LandingPageController.php (Controller)**
 ```
 namespace Silverstripe\Lessons;
 use PageController;
@@ -28,4 +28,5 @@ Our template filename mus reflect the Controller name ie `LandingPage.ss`.
 By extending the Page class, a newly created page will nherit all of its properties and functionality, such as $Title, $Content, $Menu, etc.
 
 Any time we create a new template, we need to flush the cache, so append ?flush to the URL and reload.
-*Anytime there is a namespace change, the templates break even after flushing. The content needs to be recreated in the CMS in order for the template to render properly.
+
+**Anytime there is a namespace change, the templates break even after flushing. The content needs to be recreated in the CMS in order for the template to render properly.**
