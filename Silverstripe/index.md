@@ -33,7 +33,7 @@ Any time we create a new template, we need to flush the cache, so append ?flush 
 
 ## Add Customer fields
 In order to add custom fields to a CMS page, we need to create a table where we can store the updated settings.
-We can also include various field types like TextFields, DateFields, Image and File uploaders and more like to `use SilverStripe\Forms\TextField;`.
+We can also include various field types like TextFields, DateFields, Image / File uploaders and more like so: `use SilverStripe\Forms\TextField;` and use those in our Model classes.
 
 **LandingPage.php**
 ```
@@ -49,4 +49,5 @@ We can also include various field types like TextFields, DateFields, Image and F
     return $fields;
   }
 ```
+The `getCMSFields()` function will add the custom field in the page edit sreen underneath the content area.
 Then in the front end, we can retrieve the `$BannerTitle` content stored in the database.
