@@ -99,7 +99,7 @@ class ServiceTypeAdmin extends ModelAdmin
   ];
 }
 ```
-The menu item manages the `ServiceType` dataObject.
+The menu item displays the `ServiceType` dataObjects stored in the database.
 
 **LandingPage.php (Page Model)**
 ```
@@ -117,7 +117,7 @@ The menu item manages the `ServiceType` dataObject.
   }
 
 ```
-Here we are settings up the ORM relationship with ServiceType and including a 
+Here we are settings up the ORM relationship with a `ServiceType` and include a 
 [dropdown list](https://api.silverstripe.org/4/SilverStripe/Forms/DropdownField.html)
- which includes all the ServiceTypes as options.
-The dropdown list stores the `ServiceTypeID` on the `LandingPage` Object which is how SS sets the relational column with `ServiceTypes`.
+ with all `ServiceType` options.
+The dropdown list stores the `ServiceTypeID` to the `LandingPage` which is how SS sets the relationship with a `ServiceType`.
