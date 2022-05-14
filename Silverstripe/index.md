@@ -55,9 +55,9 @@ Then in the front end, we can retrieve the `$BannerTitle` content stored in the 
 
 ## Provide support for a Category (like) relationship
 Steps to setup a relationship for the `LandingPage` Model to have a `Service` type selection include:
-- adding `ServiceType` DataObject which will be a new table that has a `has_many` relationship to a `LandingPage`
-- creating a class for displaying a global menu for `ServiceTypes` called `ServiceTypeAdmin`
-- and adding a `has_one` relationship from `LandingPage` to `ServiceType` and a select field which allows admins to choose a service type.
+- adding a `ServiceType` DataObject which will create a new table with a `has_many` relationship to a `LandingPage`,
+- creating a class for displaying a global menu for these `ServiceTypes` objects called `ServiceTypeAdmin`,
+- and adding a `has_one` relationship from a `LandingPage` to a `ServiceType` with a select field which allows admins to choose a service type.
 
 **ServiceType.php (Data Object)**
 ```
