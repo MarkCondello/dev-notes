@@ -123,11 +123,11 @@ Here we are settings up the ORM relationship with a `ServiceType` and include a
 The dropdown list stores the `ServiceTypeID` to the `LandingPage` which is how SS sets the relationship with a `ServiceType`.
 
 ## Including a form on the front end
-For this feature we are adding Customer Rating form on aLanding page for users to leave a name and a rating.
+For this feature we are adding `CustomerRating` form on a `LandingPage` for users to leave a name and a rating.
 To set up this relationship we need:
-- a `CustomerRating` table which,
+- a `CustomerRating` table with a CustomerName and Rating column,
 - a relationship between a `CustomerRating` and a `LandingPage`,
-- to set up the form, its action function and display the results in the `LandingPageController`
+- to set up a form with mapped fields, create a form action function and display the results all in the `LandingPageController` class.
 
 **CustomerRating.php (DataObject)**
 ```
@@ -186,6 +186,6 @@ class CustomerRating extends DataObject
     return CustomerRating::get()->where(['LandingPageID', $this->ID])->sort('Created', 'DESC');
   }
 ```
-Apart from the relationship between the CustomerRating and the LandingPage items, most of the work and processing is done in the controller. 
-The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns) and stores those into the `CustomerRating` table.
-We can then retrieve all the `LandingPage` `CustomerRating` items by retrieving them by the `LandingPage` ID.
+Apart from the relationship between the `CustomerRating` and the `LandingPage` items, most of the work and form processing is done in the controller. 
+The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
+We can then retrieve all the `CustomerRating` items for the `LandingPage` using the ORM system. See `GetCustomerRatings()` function above.
