@@ -121,3 +121,71 @@ Here we are settings up the ORM relationship with a `ServiceType` and include a
 [dropdown list](https://api.silverstripe.org/4/SilverStripe/Forms/DropdownField.html)
  with all `ServiceType` options.
 The dropdown list stores the `ServiceTypeID` to the `LandingPage` which is how SS sets the relationship with a `ServiceType`.
+
+## Including a form on the front end
+For this feature we are adding Customer Rating form on aLanding page for users to leave a name and a rating.
+To set up this relationship we need:
+- a `CustomerRating` table which,
+- a relationship between a `CustomerRating` and a `LandingPage`,
+- to set up the form, its action function and display the results in the `LandingPageController`
+
+**CustomerRating.php (DataObject)**
+```
+class CustomerRating extends DataObject
+{
+  private static $table_name = 'CustomerRating';
+  private static $db = [
+    'CustomerName' => 'Text',
+    'Rating' => 'Int'
+  ];
+  private static $has_one = [
+    'LandingPage' => LandingPage::class
+  ];
+}
+```
+**LandingPage.php (Page Model)**
+```
+...
+ private static $has_many = [
+    'CustomerRatings' => CustomerRating::class,
+  ];
+...
+```
+**LandingPageController.php (Controller)**
+```
+...
+  public function CustomerRatingForm()
+  {
+    //Form params: Which class handles the form, the name of the form, its fields, the form action.
+    $form = Form::create(
+      $this,
+      'CustomerRatingForm',
+      FieldList::create(
+        TextField::create('CustomerName'),
+        TextField::create('Rating')
+          ->setAttribute('type', 'number')
+          ->setAttribute('min', '1')
+          ->setAttribute('max', '5')
+      ),
+      FieldList::create(
+        FormAction::create('HandleSubmit', 'Add Rating')
+      )
+    );
+    return $form;
+  }
+  public function HandleSubmit($data, $form)
+  {
+    $customerRating = CustomerRating::create();
+    $customerRating->LandingPageID = $this->ID;
+    $form->saveInto($customerRating);
+    $customerRating->write();
+    return $this->redirectBack();
+  }
+  public function GetCustomerRatings()
+  {
+    return CustomerRating::get()->where(['LandingPageID', $this->ID])->sort('Created', 'DESC');
+  }
+```
+Apart from the relationship between the CustomerRating and the LandingPage items, most of the work and processing is done in the controller. 
+The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns) and stores those into the `CustomerRating` table.
+We can then retrieve all the `LandingPage` `CustomerRating` items by retrieving them by the `LandingPage` ID.
