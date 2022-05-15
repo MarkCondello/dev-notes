@@ -188,4 +188,4 @@ class CustomerRating extends DataObject
 ```
 Apart from the relationship between the `CustomerRating` and the `LandingPage` items, most of the work and form processing is done in the controller. 
 The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
-We can then retrieve all the `CustomerRating` items for the `LandingPage` using the ORM system. See `GetCustomerRatings()` function above.
+We can then retrieve all the `CustomerRating` items for the `LandingPage` using the [ORM system](https://www.silverstripe.org/learn/lessons/v4/introduction-to-the-orm-1). See `GetCustomerRatings()` function above.
