@@ -189,3 +189,100 @@ class CustomerRating extends DataObject
 Apart from the relationship between the `CustomerRating` and the `LandingPage` items, most of the work and form processing is done in the controller. 
 The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
 We can then retrieve all the `CustomerRating` items for the `LandingPage` using the [ORM system](https://www.silverstripe.org/learn/lessons/v4/introduction-to-the-orm-1). See `GetCustomerRatings()` function above.
+
+## Select Category to display Landing Pages with Pagination
+
+- create a landing page index, may need to create a holder object which allows landing pages only,
+- landing pages should only be children of the panding page holder
+<!-- - url structure should be /partners(landing page holder name)/landing_page -->
+- add paginated results for the Landing Page index
+- include a form to select categories which displays the associated landing pages
+
+### Paginated results
+In order to display paginated results we need the PaginatedList and the HTTPREquest dependency as well as a list of models we wish to paginated.
+
+**LandingPageHolderController.php**
+```
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\ORM\PaginatedList;
+class LandingPageHolderController extends PageController 
+{
+  ...
+   public function index(HTTPRequest $request)
+  {
+    $landingPages = LandingPage::get();
+    $paginatedLandingPages = PaginatedList::create(
+      $landingPages,
+      $request
+    )
+      ->setPageLength(1)
+      ->setPaginationGetVar('s'); //WT??? pagination start variable
+    $data = [
+      'Results' => $paginatedLandingPages
+    ];
+    return $data;
+  }
+}
+```
+Then on our front end, we can query the Results in our $data array like so:
+**LandingPageHolder.ss**
+```
+<% if $Results %>
+<% loop $Results %>
+  <div class="item col-md-12">
+    <div class="info-blog">
+      <ul class="top-info">
+        <% if $ServiceType %>
+        <li>$ServiceType.Name</li>
+        <% end_if %>
+      </ul>
+      <h3>
+        <a href="$Link">$Title</a>
+      </h3>
+      ...
+```
+
+### Including a form to select categories
+To display a form on the front end we can create a method which uses the `Form` dependency amongst other to display the the fields and button action
+**LandingPageHolderController.php**
+```
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FormAction;
+...
+  public function LandingPageCategoryFilter()
+  {
+    $form = Form::create(
+      $this,
+      'LandingPageCategoryFilter',
+      FieldList::create(
+        DropdownField::create('ServiceTypeID', 'Select a service type', ServiceType::get() )->setEmptyString('(All service types)')
+      ),
+      FieldList::create(
+        FormAction::create('index', "Filter Partners")
+      )
+    );
+    $form->setFormMethod('GET')
+      ->setFormAction($this->link())
+      ->disableSecurityToken()
+      ->loadDataFrom($this->request->getVars()); // this loads the previous selection 
+    return $form;
+  }
+```
+
+Then on the front end we can display this using the variable `$LandingPageCategoryFilter`.
+To process the selections a user makes, we need to add a check to the index method for what gets passed in through the rquest.
+**LandingPageHolderController.php**
+```
+ public function index(HTTPRequest $request)
+  {
+    $landingPages = LandingPage::get();
+    if($catID = $request->getVar('ServiceTypeID')) {
+      $landingPages = LandingPage::get()->where(
+        "\"ServiceTypeID\" = $catID"
+      );
+    }
+  ...
+```
+As you can see above, we are filtering our the LandingPage items by the ServiceTypeID they are associated to.
