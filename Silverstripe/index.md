@@ -190,16 +190,15 @@ Apart from the relationship between the `CustomerRating` and the `LandingPage` i
 The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
 We can then retrieve all the `CustomerRating` items for the `LandingPage` using the [ORM system](https://www.silverstripe.org/learn/lessons/v4/introduction-to-the-orm-1). See `GetCustomerRatings()` function above.
 
-## Select Category to display Landing Pages with Pagination
+## Select ServiceID to display LandingPages with paginated results
 
 - create a landing page index, may need to create a holder object which allows landing pages only,
-- landing pages should only be children of the panding page holder
-<!-- - url structure should be /partners(landing page holder name)/landing_page -->
+- landing pages should only be children of the panding page holder ( the url structure should be /partners(landing page holder name)/landing_page)
 - add paginated results for the Landing Page index
-- include a form to select categories which displays the associated landing pages
+- include a form to select a service which displays the associated landing pages
 
 ### Paginated results
-In order to display paginated results we need the PaginatedList and the HTTPREquest dependency as well as a list of models we wish to paginated.
+In order to display paginated results we need the PaginatedList and the HTTPRequest dependency as well as a list of models we wish to paginated.
 
 **LandingPageHolderController.php**
 ```
@@ -272,7 +271,8 @@ use SilverStripe\Forms\FormAction;
 ```
 
 Then on the front end we can display this using the variable `$LandingPageCategoryFilter`.
-To process the selections a user makes, we need to add a check to the index method for what gets passed in through the rquest.
+To process the selections a user makes, we need to add a check to the index method for what gets passed in through the request.
+
 **LandingPageHolderController.php**
 ```
  public function index(HTTPRequest $request)
