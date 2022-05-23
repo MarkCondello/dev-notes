@@ -278,11 +278,12 @@ To process the selections a user makes, we need to add a check to the index meth
  public function index(HTTPRequest $request)
   {
     $landingPages = LandingPage::get();
-    if($catID = $request->getVar('ServiceTypeID')) {
-      $landingPages = LandingPage::get()->where(
-        "\"ServiceTypeID\" = $catID"
-      );
+    if ($serviceID = $request->getVar('ServiceTypeID')) {
+      $landingPages = $landingPages->filter([
+        'ServiceType.ID' => $serviceID
+      ]);
     }
   ...
 ```
 As you can see above, we are filtering our the LandingPage items by the ServiceTypeID they are associated to.
+The ServiceType relationship is set in the LandingPage Model.
