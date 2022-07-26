@@ -6,7 +6,7 @@ Sending an Ajax request in WP requires the following requirements:
   - including an `action` name so we can use the action hook `add_action("wp_ajax_NAME_OF_THE_ACTION")`
 
 ## PHP implementation
-We can use a form or an anchor tag with the required items above to send of a request to `admin-ajax.php`
+We can use a form or an anchor tag with the required items above to send off a request to `admin-ajax.php`
 
 *php form*
 ```
@@ -24,11 +24,11 @@ We can use a form or an anchor tag with the required items above to send of a re
 ```
 *php anchor*
 ```
-  @php($link = admin_url("admin-ajax.php?action=user_vote&post_id=".get_the_ID()."&nonce=$nonce") )
-  <a href="{{ $link }}" data-nonce="{{ $nonce }}" data-post_id="{{ the_ID() }}" class="user_vote">Vote for this post</a>
+@php($link = admin_url("admin-ajax.php?action=user_vote&post_id=".get_the_ID()."&nonce=$nonce") )
+<a href="{{ $link }}" data-nonce="{{ $nonce }}" data-post_id="{{ the_ID() }}" class="user_vote">Vote for this post</a>
 ```
 
-Then in our plugin or function, we catch the custom action name then delegate to a callback to verify the nonce passed in and process the request.
+Then in our plugin or function, we catch the custom action name *user_vote*, then delegate to a callback, verify the nonce passed in and then process the request.
 
 *The plugin which handles the ajax request*
 ```
@@ -72,7 +72,7 @@ $VoteForPost = new VoteForPost();
 ```
 
 ## JS implementation
-For the js implementation, its almost the same but we handle setting the path to the `wp-admin-ajax.php` using a wordpress function called localize script. Its here we can add the path in the site markup:
+For the js implementation, its almost the same but we handle setting the path to the `wp-admin-ajax.php` using a wordpress function called localize script. Its here where we can add the path in the site markup:
 `localize('site_script', ['ajaxurl' => admin_url( 'admin-ajax.php' ),]`
 
 Here is the markup used in this demo:
@@ -80,22 +80,24 @@ Here is the markup used in this demo:
   <button data-nonce="{{ $nonce }}" data-post-id="{{ the_ID() }}" id="user_vote">Vote for this post.</button>
 ```
 
-Then in the JS, we grab the data attributes and and append those values to a FormData object. We also need to pass in the custom *action* name so when the request reaches *wp-admin-ajax.php* we catch that request with the `wp_ajax_user_vote` action in our plugin:
+Then in the JS, we grab the data attributes and append those values to a FormData object. We also need to pass in the custom *action* name so when the request reaches *wp-admin-ajax.php* we catch that request with the `wp_ajax_user_vote` action in our plugin:
 ```
-const userVoteBtn = document.getElementById('user_vote'),
-  voteCounter = document.getElementById('vote_counter');
-  if(userVoteBtn && voteCounter) {
+  const userVoteBtn = document.getElementById('user_vote'),
+  voteCounter = document.getElementById('vote_counter')
+
+  if (userVoteBtn && voteCounter) {
     userVoteBtn.addEventListener('click', function(ev) {
       ev.preventDefault()
+
       const ajaxUrl = site_script.ajaxurl,
       post_id = this.dataset.postId,
-      nonce = this.dataset.nonce;
+      nonce = this.dataset.nonce
 
-      let form_data = new FormData;
-      form_data.append('action', 'user_vote');
-      form_data.append('post_id', post_id);
-      form_data.append('nonce', nonce);
-      form_data.append('is_ajax', true);
+      let form_data = new FormData
+      form_data.append('action', 'user_vote')
+      form_data.append('post_id', post_id)
+      form_data.append('nonce', nonce)
+      form_data.append('is_ajax', true)
 
       axios.post(ajaxUrl, form_data)
         .then(resp => {
@@ -105,7 +107,6 @@ const userVoteBtn = document.getElementById('user_vote'),
         .catch(err => {
           console.error();
         })
-
-    });
+    })
   }
 ```
