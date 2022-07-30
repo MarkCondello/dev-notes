@@ -1,4 +1,4 @@
-# Sending AJAX request in WP
+# [Sending AJAX request in WP](https://wpmudev.com/blog/using-ajax-with-wordpress/)
 
 Sending an Ajax request in WP requires the following requirements:
   - the `admin-ajax.php` file in the request
