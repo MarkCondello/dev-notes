@@ -51,6 +51,36 @@ function custom_get_posts($extra_args=array()) {
     if(wp_doing_ajax()):
         $extra_args = $_POST;
     endif;
+    // The tax and meta query is not in use
+    // $tax_query = array();
+    // $meta_query = array();
+    // if(!empty($extra_args['tax'])):
+    //     $tax_query['relation'] = 'AND';
+    //     foreach ($extra_args['tax'] as $tax_key => $tax):
+    //         if(!empty($tax) && $tax && $tax != "null"):
+    //             $tax = (is_array($tax) ? $tax : array($tax));
+    //             $tax_query[] = array(
+    //                 'taxonomy' => $tax_key,
+    //                 'field'    => 'term_id',
+    //                 'terms'    => $tax,
+    //             );
+    //         endif;
+    //     endforeach;
+    //     unset($extra_args['tax']);
+    // endif;
+    // if(!empty($extra_args['meta'])):
+    //     $meta_query['relation'] = 'AND';
+    //     foreach ($extra_args['meta'] as $meta_key => $meta):
+    //         if(!empty($meta) && $meta && $meta != "null"):
+    //             $meta_query[] = array(
+    //                 'key'       => $meta_key,
+    //                 'value'     => $meta,
+    //                 'compare'   => '='
+    //             );
+    //         endif;
+    //     endforeach;
+    //     unset($extra_args['meta']);
+    // endif;
     $posts_per_page = get_option('posts_per_page');
     $args = array(
         'post_type'      => 'post',
