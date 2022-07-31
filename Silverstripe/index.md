@@ -52,7 +52,6 @@ We can also include various field types like TextFields, DateFields, Image / Fil
 The `getCMSFields()` function will add the custom field in the page edit sreen underneath the content area.
 Then in the front end, we can retrieve the `$BannerTitle` content stored in the database.
 
-
 ## Provide support for a Category (like) relationship
 Steps to setup a relationship for the `LandingPage` Model to have a `Service` type selection include:
 - adding a `ServiceType` DataObject which will create a new table with a `has_many` relationship to a `LandingPage`,

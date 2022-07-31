@@ -29,7 +29,6 @@ When cloning, remember to add the custom Host text eg github.com-markconddcode a
 
 `git clone git@github.com-markconddcode:DCODE-GROUP/sass-lib.git`
 
-
 [Video with details here.](https://www.youtube.com/watch?v=ap56ivm0dhw)
 
 
