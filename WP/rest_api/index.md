@@ -48,7 +48,7 @@ Then over in our Javascript, we can retieve the `nonce` by referencing `SiteData
     const noteId = $(this).data('noteId')
     $.ajax({
       beforeSend: (xhr) => {
-        xhr.setRequestHeader('X-WP-Nonce', uniData.nonce) //Number used once
+        xhr.setRequestHeader('X-WP-Nonce', siteData.nonce) //Number used once
       },
       url: `${uniData.root_url}/wp-json/wp/v2/note/${noteId}`,
       type: 'DELETE',
