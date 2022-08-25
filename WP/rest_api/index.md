@@ -8,11 +8,6 @@ This is also true of the JavaScript code we write. When we include a URL in our 
 
 ## Global Parameters
 The WP REST API has various options available which can be [found here](https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/).
-Making a GET request for a specific page or post title with predefined fields in the payload can be done with AXIOS:
-```
-axios.get('/wp-json/wp/v2/pages?search=SOME_PAGE_TITLE&_fields=id,title.link')
-  .then(resp => console.log({resp}))
-```
 
 ## Endpoints
 A list of all the endpoints available can be found [here](https://developer.wordpress.org/rest-api/reference/#rest-api-developer-endpoint-reference)
@@ -30,9 +25,16 @@ We can [hardcode the authentication](https://www.youtube.com/watch?v=LuoZL4UnV34
 
 <!-- This plugin may be helpful for making async requests: https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/ -->
 
-### Delete
+### Read
 
-We can authenticate the request by using a `nonce` or *Number Used Once* and pass that value in the header of the request. To set this up, we can use the `wp_localize_script()` function and use the `wp_create_nonce(**NAME OF NONCE**)` and reuse that value. See the details below:
+Making a GET request for a specific page or post title with predefined fields in the payload can be done without authentication:
+```
+axios.get('/wp-json/wp/v2/pages?search=SOME_PAGE_TITLE&_fields=id,title.link')
+  .then(resp => console.log({resp}))
+```
+
+### Delete
+To create a delete request, we must authenticate the request by using a `nonce` or *Number Used Once* header. To set this up, we can use the `wp_localize_script()` function and use the `wp_create_nonce(**NAME OF NONCE**)` and reuse that value. See the details below:
 
 ```
     wp_localize_script('university_main_scripts', 'siteData', [
@@ -42,7 +44,7 @@ We can authenticate the request by using a `nonce` or *Number Used Once* and pas
     );
 ```
 
-Then over in our Javascript, we can retieve the `nonce` by referencing `SiteData.nonce` as our value for the header parameter call 'X-WP-Nonce'. See the details below:
+Then over in our Javascript, we can retieve the `nonce` by referencing `SiteData.nonce` as our value for the header parameter called 'X-WP-Nonce'. See the [documentation here](https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/) and view code example below:
 ```
  deleteNote() {
     const noteId = $(this).data('noteId')
@@ -61,4 +63,6 @@ Then over in our Javascript, we can retieve the `nonce` by referencing `SiteData
     })
   }
 ```
-Sending headers can also be done using [Axios](https://stackoverflow.com/questions/45578844/how-to-set-header-and-options-in-axios).
+An example of sending headers with [Axios](https://stackoverflow.com/questions/45578844/how-to-set-header-and-options-in-axios).
+
+### Update
