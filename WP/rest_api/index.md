@@ -20,12 +20,45 @@ A list of all the endpoints available can be found [here](https://developer.word
 ## CRUD operations
 While making GET requests is simple with the REST API, the other CRUD operations require authentication.
 
-We can install the [Basic Auth plugin](https://github.com/WP-API/Basic-Auth) to allow us to pass username and password details for local or SSL secured websites.
+<!-- We can install the [Basic Auth plugin](https://github.com/WP-API/Basic-Auth) to allow us to pass username and password details for local or SSL secured websites.
 
 We can [hardcode the authentication](https://www.youtube.com/watch?v=LuoZL4UnV34) by passing the username and password values with the Authorization request headers:
 
-`echo "Basic.base64_encode('user:password')";`
+`echo "Basic.base64_encode('user:password')";` -->
 
-***These settings work with Postman requests, but when adding the same header to AXIOS, it does not..***
+<!-- ***These settings work with Postman requests, but when adding the same header to AXIOS, it does not..*** -->
 
 <!-- This plugin may be helpful for making async requests: https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/ -->
+
+### Delete
+
+We can authenticate the request by using a `nonce` or *Number Used Once* and pass that value in the header of the request. To set this up, we can use the `wp_localize_script()` function and use the `wp_create_nonce(**NAME OF NONCE**)` and reuse that value. See the details below:
+
+```
+    wp_localize_script('university_main_scripts', 'siteData', [
+            'root_url' => get_site_url(),
+            'nonce' => wp_create_nonce('wp_rest'), // Number used once
+        ]
+    );
+```
+
+Then over in our Javascript, we can retieve the `nonce` by referencing `SiteData.nonce` as our value for the header parameter call 'X-WP-Nonce'. See the details below:
+```
+ deleteNote() {
+    const noteId = $(this).data('noteId')
+    $.ajax({
+      beforeSend: (xhr) => {
+        xhr.setRequestHeader('X-WP-Nonce', uniData.nonce) //Number used once
+      },
+      url: `${uniData.root_url}/wp-json/wp/v2/note/${noteId}`,
+      type: 'DELETE',
+      success: (response) => {
+        console.log('Successful: ', response)
+      },
+      error: (response) => {
+        console.log('Unsuccessful: ', response)
+      },
+    })
+  }
+```
+Sending headers can also be done using [Axios](https://stackoverflow.com/questions/45578844/how-to-set-header-and-options-in-axios).
