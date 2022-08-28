@@ -50,24 +50,3 @@ function my_acf_google_map_api( $api ){
 
 add_filter('acf/fields/google_map/api', __NAMESPACE__.'\\my_acf_google_map_api');
 ```
-
-
-## Register Guttenburg Block areas:
-
-```
-function yoke_blocks( $categories ) {
-    $category_slugs = wp_list_pluck( $categories, 'slug' );
-    return in_array( 'yoke', $category_slugs, true ) ? $categories : array_merge(
-        $categories,
-        array(
-            array(
-                'slug'  => 'yoke',
-                'title' => __( 'Yoke Blocks', 'yoke' ),
-                'icon'  => null,
-            ),
-        )
-    );
-}
-
-add_filter( 'block_categories', __NAMESPACE__.'\\yoke_blocks' );
-```
