@@ -62,7 +62,7 @@ edit(){
 ```
 
 ## Issue with changing source code
-As soon save method is changed, WP no longer knows how to generate the content that is being requested. The block becomes unresponsive and WP displays an error.
+As soon save method is changed, WP no longer knows how to generate the content that is being requested. The block becomes unresponsive and WP displays an error: `This block contains unexpected or invalid content.`
 In order to work around this, we can use a `deprecated` array to retain the pasr version of the save method and any associated attributes, so the block can still be rendered.
 ```
   save(props){
@@ -86,9 +86,31 @@ In order to work around this, we can use a `deprecated` array to retain the pasr
 *Note:* this may solve the problem of the WP admin error but it still requires the user to go into every post, custom post type or page  where this block is used and save it again to generate the update.
 
 ## Delegate saving block data to PHP
+WP has functions named `register_block_type` which allow us define a custom `render_callback` where we can choose how to display block changes and retrieve the updated `attributes` using the functions param.
+For this to work, we want to return null from the blocks save method and change the initial setup under the heading `Custom Block Setup` to the below:
+```
+ public function __construct()
+  {
+    add_action('init', [$this, 'adminAssets']);
+  }
+  public function adminAssets()
+  {
+    wp_register_script('areyoupayginattentionscript', plugin_dir_url(__FILE__) . '/build/index.js', ['wp-blocks']);
+    register_block_type('mrc-plugin/are-you-paying-attention', [
+      'editor_script' => 'areyoupayginattentionscript',
+      'render_callback' => [$this, 'theHTML'], // this is where we delegate saving the block to PHP
+    ]);
+  }
+  public function theHTML($attrs)
+  {
+    ob_start(); // anything thing that comes after this function is added to the buffer?>
+    <h3>Today the sky is completely <?= $attrs["skyColor"] ?> and the grass is <?= $attrs["grassColor"] ?>...</h3>
+    <?php
+    return ob_get_clean();
+  }
+```
 
-
-
+*The full example explained above can be found in this directory `are-you-paying-attention.zip`*
 
 ## Register Guttenburg Block Category area:
 ```
