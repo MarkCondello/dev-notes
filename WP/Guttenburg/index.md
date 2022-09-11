@@ -26,7 +26,8 @@ wp.blocks.registerBlockType('mrc-plugin/are-you-paying-attention', {
   save(){
     return wp.element.createElement('h3', null, 'Hello, this is from the front end website.')
   },
-})```
+})
+```
 
 *Note:* the above example is *not* using JSX, but another function available from the wp global object `element.createElement`. In order to use JSX we must add an extra npm dependency called [@wordpress/scripts](https://www.npmjs.com/package/@wordpress/scripts).
 
@@ -45,7 +46,6 @@ edit(){
 
 ## Adding attributes to edit method and displaying the udpate in the save method
 `Attributes` are options which can be saved for the block. We set those attributes and access them through props. See the an example fragment below:
-
 ```
   attributes: {
     skyColor: {type: "string", },
