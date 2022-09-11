@@ -39,8 +39,9 @@ We need to enqueue this file with the `enqueue_block_editor_assets` function.
 With this workflow in place, we can now use JSX. Eg:
 ```
 edit(){
-return <h3>Hello, this is from the admin block editor from JSX.</h3>
-},```
+    return <h3>Hello, this is from the admin block editor from JSX.</h3>
+}
+```
 
 ## Adding attributes to edit method and displaying the udpate in the save method
 `Attributes` are options which can be saved for the block. We set those attributes and access them through props. See the an example fragment below:
