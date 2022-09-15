@@ -31,5 +31,12 @@ When cloning, remember to add the custom Host text eg github.com-markconddcode a
 
 [Video with details here.](https://www.youtube.com/watch?v=ap56ivm0dhw)
 
-
-
+## Initialize a repo locally
+```
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin <REMOTE_URL/>
+git push -u origin main
+```
