@@ -126,7 +126,7 @@ import { InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/b
 A list of available options to use from `block-editor` can be found [here](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/).
 
 *Gutenburg storybook*
-A playground where we can use each of the features available with Gutenburg can be found (here)[https://wordpress.github.io/gutenberg/?path=/story/docs-introduction--page].
+A playground where we can use each of the features available with Gutenburg can be found [here](https://wordpress.github.io/gutenberg/?path=/story/docs-introduction--page).
 
 ## Using `wp.data.subscribe` to check block state values
 We can tap into the admin interface features like the update button and prevent saves from occuring until the settings on our block have been added correctly. ` wp.data.subscribe()` takes a callback which we can check the current state with. In the example below we check to see if all blocks by a certain name has a specific setting added before allowing the update button to be active.
@@ -151,7 +151,7 @@ We can tap into the admin interface features like the update button and prevent 
 ```
 
 ## Loading front end CSS / JS assets
-By leveraging the `render_callback` (like it was mentioned under the *Delegate saving block data to PHP* title ) we can load our scripts and styles specific for that block.
+By leveraging the `render_callback` (like it was mentioned under the *Delegate saving block data to PHP* title ) we can load our scripts and styles which are specific for the block.
 In this example our callback is called `theHTML`, and this is where we load the extra assets:
 ```
  public function theHTML($attrs)
@@ -188,11 +188,12 @@ payingAttentionBlocks.forEach(block => {
   block.classList.remove('paying-attention-block')
 })
 ```
-*Note:* THe npm wp-scripts does not included React in the build but instead bundles the scripts we create for react to be used on the front end.
+*Note:* The npm wp-scripts does not included `React` in the build but instead bundles the scripts we create for react to be used on the front end.
 
 ## Using block.json to define a block
-Leveraging the block.json file, we can defined the properties for a block and the assets for the admin. If we are using the `render_callback` function, assets for the front end will not be loaded and so the method descibed under the header above *Loading front end assets for a custom block* should be used instead. 
-A code example and more details can be found in the codex (here)[https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/]
+Leveraging the `block.json` file, we can defined the properties for a block and the assets for the admin. If we are using the `render_callback` function, assets for the front end will not be loaded and so the method descibed under the header above *Loading front end assets for a custom block* should be used instead.
+
+A code example and more details can be found in the codex [here](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/)
 
 ## Register a custom Guttenburg Block Category area
 We can define our own custom block category in our theme like so:
@@ -214,35 +215,36 @@ function sgy_blocks( $categories ) {
 add_filter( 'block_categories', __NAMESPACE__.'\\sgy_blocks' );
 ```
 
-## Loading props data to front end and backend markup
+## Loading block markup for the front and back end
 Similar to what was done under the title *Loading props data to front end*, we can return markup from PHP for both the front end and back end layouts to keep our code DRY.
-Instead of working with React and Javascript like the title *Loading props data to front end*, we can instead use PHP and WP methods to generate the content we want to display to the front end and the back end. An example of a type of function named *generateProfessorHtml()* can be found (here)[https://github.com/MarkCondello/amazing_university_wp_theme/blob/master/wp-content/plugins/featured-professor/inc/generateProfessorHTML.php]
 
-While this is easy to use for the front end, for the back end we need to leverage the React usestate, useEffect and the WP apiFetch function. 
+Instead of working with React and Javascript like the title *Loading props data to front end*, we can instead use PHP and WP methods to generate the content we want to display to the front end and the back end. An example of what can be achieved using this approach ncan be seen in the *generateProfessorHtml()* function [found here](https://github.com/MarkCondello/amazing_university_wp_theme/blob/master/wp-content/plugins/featured-professor/inc/generateProfessorHTML.php)
+
+While this is easy to use for the front end, for the back end we need to leverage the React `usestate`, `useEffect` and the WP `apiFetch` functions.
 We also need to setup a custom endpoint to retrieve the markup based on changes to state in our custom block.
 In order to set that up, we can do the following in our plugin file:
-
 ```
   function __construct() {
     add_action('init', [$this, 'onInit']);
-    add_action('rest_api_init', [$this, 'professorHTML']);
+    add_action('rest_api_init', [$this, 'professorHTML']); // this is a callback to create an endpoint
   }
-
   function professorHTML()
   {
     register_rest_route('featuredProfessor/v1', 'getHTML', [
-      'method' => 'GET', // WP_REST_SERVER::READABLE
+      'method' => 'GET',
       'callback' => [$this, 'renderCallback'],
     ]);
   }
 ```
-Then in our block Javascript we need to include the extra dependencies mentioned above. See the imports which are used below
+*Note: * to view the result of this function we can go to a url similar to this one: `/wp-json/featuredProfessor/v1/getHTML?professorId=63`, but changing the professorId value with one that exists in the CMS.
+
+In our block Javascript we need to include the extra JS dependencies mentioned above. See the imports which are used below
 ```
 import {useState, useEffect} from "react"
 import apiFetch from "@wordpress/api-fetch"
 ```
 
-Now in our edit method, we can set the state to be used the check if a Professor selection is made to generate a preview exactly like the front end display.
+Now in our edit method, we can set up the state values to be used to check if a `Professor` selection is made which will generate a preview exactly like how the front end displays it.
 
 ```
   const [thePreview, setThePreview] = useState("")
@@ -257,13 +259,13 @@ Now in our edit method, we can set the state to be used the check if a Professor
     go()
   }, [props.attributes.professorId])
 ```
-`useEffect()` takes 2 params. The first being the callback, the second is the piece of state to watch for changes. In the example above, we check for changes to the professorId.
-*Note:* because it is an asynchronous call, we use async / await to retrieve the markup from the endpoint we specified in the plugin PHP file.
+`useEffect()` takes 2 params. The first being the callback, the second is the piece of state to watch for changes. In the example above, we check for changes to the `props.attributes.professorId` value.
+*Note:* because `apiFetch()` it is an asynchronous call, we use async / await to retrieve the markup from the endpoint we specified in the plugin PHP file once it is resolved.
 
-With this in place, anytime a professorId is change, `useEffect()` will run the callback function, make a request to the endpoint to retrieve the markup generated by the PHP function `generateProfessorHtml()`, and update the state property called `thePreview` with the `setThePreview` useState function.
+With this in place, anytime a professorId is change, `useEffect()` will run the callback function, make a request to the endpoint to retrieve the markup generated by the PHP function `generateProfessorHtml($attribute[professorId])`, and update the state property called `thePreview` using the `setThePreview` useState function.
 
-The last thing left to do is present the update in the template. This can only be done using `dangerouslySetInnerHTML`. An example of the usage can be found below:
+The last thing left to do is present the update in the template. This can only be done using `dangerouslySetInnerHTML` due to React not wanting to render markup generated from another source. An example of the usage can be found below:
 ```
 <div dangerouslySetInnerHTML={{__html: thePreview}}></div>
 ```
-The full code example for this implementation can be found (here)[(here)[https://github.com/MarkCondello/amazing_university_wp_theme/blob/master/wp-content/plugins/featured-professor/]]
+The full code example for this implementation can be found [here](https://github.com/MarkCondello/amazing_university_wp_theme/blob/master/wp-content/plugins/featured-professor/)
