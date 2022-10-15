@@ -283,6 +283,6 @@ register_meta('post', 'featuredprofessor', [
 
 Then in the block JS file, we can leverage useEffect() to check for changes to the professorId and trigger an update for this `featuredprofessor` meta using the `wp.data.dispatch("core/editor")`.
 
-A working example of this integration, with notes about how the update and removal of the meta data is done with `useEffect()` can be found here.
+A working example of this integration, with notes about how the update and removal of the meta data is done with `useEffect()` can be found [here](https://github.com/MarkCondello/amazing_university_wp_theme/blob/master/wp-content/plugins/featured-professor/src/index.js).
 
 A more inclusive list of the available methods which can be used to store data against a post/page with `wp.data` can be found [here](https://salferrarello.com/gutenberg-js/)
