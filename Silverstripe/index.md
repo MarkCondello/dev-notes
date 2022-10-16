@@ -356,7 +356,7 @@ private static $has_one = [
 ];
 ```
 After running a `/dev/build` SS will generate the relationship on the `LandingPage` table like the screenshot below:
-!['has_one_&_has_many']('https://github.com/MarkCondello/dev-notes/blob/main/Silverstripe/imgs/has_one_has_many.png')
+![has_one_&_has_many](https://github.com/MarkCondello/dev-notes/blob/main/Silverstripe/imgs/has_one_has_many.png)
 
 ## has_many_many relationships
 
