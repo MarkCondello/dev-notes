@@ -60,7 +60,7 @@ Steps to setup a relationship for the `LandingPage` Model to have a `Service` ty
 
 **ServiceType.php (Data Object)**
 ```
-namespace Markcond\Research; 
+namespace Markcond\Research;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
@@ -186,7 +186,7 @@ class CustomerRating extends DataObject
   }
 ```
 Apart from the relationship between the `CustomerRating` and the `LandingPage` items, most of the work and form processing is done in the controller. 
-The `HandleSubmit()` method gathers all the data from the form ( the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
+The `HandleSubmit()` method gathers all the data from the form (the form has field names which correspond to the table columns ie CustomerName and Rating) and stores those into the `CustomerRating` table.
 We can then retrieve all the `CustomerRating` items for the `LandingPage` using the [ORM system](https://www.silverstripe.org/learn/lessons/v4/introduction-to-the-orm-1). See `GetCustomerRatings()` function above.
 
 ## Select ServiceID to display LandingPages with paginated results
@@ -286,3 +286,81 @@ To process the selections a user makes, we need to add a check to the index meth
 ```
 As you can see above, we are filtering our the LandingPage items by the ServiceTypeID they are associated to.
 The ServiceType relationship is set in the LandingPage Model.
+
+**Sending requests to backend**
+In a Controller, we can allow requests to be made to specific methods using:
+`private static $allowed_actions = ['leadCaptureSubscribe', 'joinLeadCapture'];`
+
+These methods can then retrieve a request and process it however we want. See an example of this below:
+```
+public function joinLeadCapture($request)
+{
+  $response = new \stdClass();
+  $response->message = '';
+  $response->success = false;
+  if (SecurityToken::inst()->checkRequest($request) && $request->postVar('email') && $request->postVar('name')) {
+    $obj = new JoinLeadCaptureSubmission();
+    $obj->EmailAddress = $request->postVar('email');
+    $obj->FullName = $request->postVar('name');
+    try {
+      if ($obj->write() !== false) {
+        $response->message = 'Success';
+        $response->success = true;
+      } else {
+        $response->message = 'Database error: '.$response->message;
+        return json_encode($response);
+      }
+    } catch (Exception $e) {
+      $message = "Error saving Lead Capture.";
+      $e->getMessage();
+      $response->message = $message;
+      user_error($message, E_USER_ERROR);
+      return json_encode($response);
+    }
+  }
+  echo json_encode($response);
+}
+```
+
+Now, we simply need to send the request with JS to this endpoint with the required inputs.
+```
+ submitButton.prop('disabled', true)
+    $.ajax({
+        type: 'POST',
+        url: 'leadCapture/joinLeadCapture',
+        data,
+        dataType: 'json'
+    }).done(function(msg) {
+      if (typeof(msg.success) != 'undefined' && msg.success == true) {
+        ...
+```
+
+*Note to self:* What is $.ajax doing differently to what axios.post is doing? Axios is sending data only to the request body and trying to retrieve values from postVar('INPUT_NAME') does not work.
+
+## has_many & has_one relationship
+Silverstripe provides scaffoloding for various types ofr data relationships. A common one is the has_many & has_one.
+In a scenario where we want to capture `CustomerRating` against a `LandingPage`, we could use this relationship and its straightforward to set up.
+A `CustomerRating` has one `LandingPage`;
+A `LandingPage` has many `CustomerRating` items.
+
+ *LandingPage.php*
+ ```
+private static $has_many = [
+  'CustomerRatings' => CustomerRating::class,
+];
+ ```
+ *CustomerRating.php*
+```
+private static $has_one = [
+  'LandingPage' => LandingPage::class
+];
+```
+After running a `/dev/build` SS will generate the relationship on the `LandingPage` table like the screenshot below:
+!['has_one_&_has_many']('./imgs/has_one_has_many.png')
+
+## has_many_many relationships
+
+<!-- `Write up notes on many_many ie info_modules data objects`
+ - include sorting `many_many_extraFields` options
+ - $belongs_many_many and the table column structure
+ - check the difference between has_many and has_many_many and provide details -->
