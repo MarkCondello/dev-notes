@@ -74,3 +74,71 @@ function calcTax(income: number, taxYear = 2022): number {
 }
 calcTax(10_000, 2023);
 ```
+
+### Objects
+We can determine which properties mush be added to an object. See example below:
+```
+let employee: {
+  id: number,
+  name: string
+} = { id: 1, name: 'Mark' }
+
+employee.id = 'something'//invalid
+employee.name = 1234//invalid
+```
+
+TS also provide a `readonly` property for object items:
+```
+let employee: {
+  readonly id: number,
+  name: string
+} = { id: 1, name: 'Mark' }
+
+employee.id = 123 //invalid
+```
+Defining methods on an object is checked by defining the returned value and the functions params:
+```
+let employee: {
+  ...
+  retire: (date: Date) => void
+} = {
+  ...
+  retire: (date: Date) => {
+    console.log(date)
+  } 
+}
+```
+This approach is verbose and there is a better way to set custom object shapes with a Type Alias.
+
+### Type Alias
+```
+type Employee = {
+  id: number,
+  name: string,
+  retire: (date: Date) => void
+}
+let dateObj = new Date();
+let goon: Employee = {
+  id: 4321,
+  name: 'Lacky',
+  retire(dateObj) {
+    return dateObj.setFullYear(dateObj.getFullYear() + 10)
+  }
+}
+```
+
+### Union Types
+In the below example we dont know what type the weight param will be. This is where we can use Narrowing to determine what type the param is. TS will will still provide us with the inferred intellisence after the Narrowing is performed.
+
+```
+function kgToLbs(weight: number | string) : number {
+  if (typeof weight === 'number') {
+    return weight * 2.2
+  } else {
+    return parseInt(weight) * 2.2
+  }
+}
+
+let tenKgToPndNumber = kgToLbs(10)
+let tenKgToPndString = kgToLbs('10kgs')
+```
