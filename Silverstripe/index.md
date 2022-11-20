@@ -337,6 +337,8 @@ Now, we simply need to send the request with JS to this endpoint with the requir
 
 *Note to self:* What is $.ajax doing differently to what axios.post is doing? Axios is sending data only to the request body and trying to retrieve values from postVar('INPUT_NAME') does not work.
 
+# [ORM relations](https://docs.silverstripe.org/en/4/developer_guides/model/relations/)
+
 ## has_many & has_one relationship
 Silverstripe provides scaffoloding for various types ofr data relationships. A common one is the has_many & has_one.
 In a scenario where we want to capture `CustomerRating` against a `LandingPage`, we could use this relationship and its straightforward to set up.
@@ -359,7 +361,11 @@ After running a `/dev/build` SS will generate the relationship on the `LandingPa
 ![has_one_&_has_many](https://github.com/MarkCondello/dev-notes/blob/main/Silverstripe/imgs/has_one_has_many.png)
 
 ## has_many_many relationships
+A common scenarion is where we need to re-use an existing relationship with another model. For example we need to link many `ArticlePage` items to various page types. This is where a `many_many` relationship would be best.
 
+In some cases where their is an existing relationship, we would need to removing the existing relationship manually in the database to make way for the new one.
+
+In this scenario, we would need to 
 <!-- `Write up notes on many_many ie info_modules data objects`
  - include sorting `many_many_extraFields` options
  - $belongs_many_many and the table column structure
