@@ -142,3 +142,6 @@ function kgToLbs(weight: number | string) : number {
 let tenKgToPndNumber = kgToLbs(10)
 let tenKgToPndString = kgToLbs('10kgs')
 ```
+
+### Intersection Types
+An object which is a number and a string at a same time.
