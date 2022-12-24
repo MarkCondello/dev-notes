@@ -47,7 +47,9 @@ add_action('user_redirected', function($date){
 });
 ```
 
-The example above redirects users if access a specific page and are not logged in. We opened a `do_action()` hook named 'user_redirected' which passes the date/ time and is then run with the add_action 'user_redirected'. This function logs a message to a log file. The tutorial explaining this code can be found (here)[https://www.youtube.com/watch?v=9GuJi8dYuAs].
+The example above redirects users if they access a specific page and are not logged in. We opened a `do_action()` hook named 'user_redirected' which passes the date/ time and is then run with the add_action 'user_redirected'.
+
+The implementation of this action logs a message to a log file. The tutorial explaining this code can be found (here)[https://www.youtube.com/watch?v=9GuJi8dYuAs].
 
 
 ## [ShortCode action](https://www.smashingmagazine.com/2012/05/wordpress-shortcodes-complete-guide/)
