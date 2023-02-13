@@ -1,3 +1,8 @@
+## Filters
+A full list of all the filters available in WP can be found in the codex [here](https://codex.wordpress.org/Plugin_API/Filter_Reference).
+
+
+
 ## the_content
 Using the_content() filter allows us to modify the content for posts or pages.
 The below implementation adds content to the end of blog posts show pages if it is in the main query.

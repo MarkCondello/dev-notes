@@ -6,3 +6,5 @@
 
 ## Find and replace
 `update <TABLE_NAME> set <TABLE_COLUMN> = replace(<TABLE_COLUMN>, '<STRING_TO_FIND>', '<STRING_TO_REPLACE>');`
+
+/Applications/MAMP/library/bin/mysqldump -u root -p sigma-healthcare <> ./sigma_wp_staging.sql
