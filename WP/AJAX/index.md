@@ -110,3 +110,169 @@ Then in the JS, we grab the data attributes and append those values to a FormDat
     })
   }
 ```
+
+
+## ANOTHER EXAMPLE OF AJAX in WP
+
+Here we have the Ajax Admin plug-in demo from the exercise files. This demo includes three essential functions. The first function includes the JavaScript file. The second function processes or handles the Ajax request. And the third function displays the mark-up for the Ajax form and response data. Additionally, this plug-in requires a JavaScript file. All Ajax requires some sort of JavaScript to send the client request to the server.
+
+We can create an admin page which loads a AJAX request using a plugin with a few functions.
+The first enqueue the javascript required for the Ajax request to run using the admin_enqueue_scripts action. Within this function a nonce is also created to prevent against external injection.
+
+// enqueue scripts
+function ajax_admin_enqueue_scripts( $hook ) {
+
+	// check if our page
+	if ( 'toplevel_page_ajax-admin-example' !== $hook ) return;
+
+	// define script url
+	$script_url = plugins_url( '/ajax-admin.js', __FILE__ );
+
+	// enqueue script
+	wp_enqueue_script( 'ajax-admin', $script_url, array( 'jquery' ) );
+
+	// create nonce
+	$nonce = wp_create_nonce( 'ajax_admin' );
+
+	// define script
+	$script = array( 'nonce' => $nonce );
+
+	// localize script
+	wp_localize_script( 'ajax-admin', 'ajax_admin', $script );
+
+}
+add_action( 'admin_enqueue_scripts', 'ajax_admin_enqueue_scripts' );
+
+The other main function which allows an AJAX requests within the admin area is triggered by the wp_ajax_admin_hook hook.
+When a $_POST request is made when submitting the form for an endpoint, the javascript file mentioned above is run. 
+
+// process ajax request
+function ajax_admin_handler() {
+
+	// check nonce
+	check_ajax_referer( 'ajax_admin', 'nonce' );
+
+	// check user
+	if ( ! current_user_can( 'manage_options' ) ) return;
+
+	// define the url
+	$url = isset( $_POST['url'] ) ? esc_url_raw( $_POST['url'] ) : false;
+    
+    // make get request
+    $responseGet = wp_safe_remote_get( $url, array( 'method' => 'GET' ) );
+
+    //get_body response
+    $body = wp_remote_retrieve_body($responseGet);
+    
+    echo '<pre>';
+    
+    if ( ! empty( $body ) ) {
+        echo 'Response body for: '. $url . "\n\n";
+        print_r( $body);
+        
+    } else {
+        echo 'No results. Please check the URL and try again.';
+     }
+    
+    echo '</pre>';
+
+	// end processing
+	wp_die();
+
+}
+// ajax hook for logged-in users: wp_ajax_{action}
+add_action( 'wp_ajax_admin_hook', 'ajax_admin_handler' );
+
+The following function calls another functions to generate the markup used for the plugin page settings including the form mentioned before:// add top-level administrative menu
+function ajax_admin_add_toplevel_menu() {
+
+	add_menu_page(
+		'Ajax Example: Admin Area',
+		'Ajax Example',
+		'manage_options',
+		'ajax-admin-example',
+		'ajax_admin_display_settings_page', // function to display the settings markup
+		'dashicons-admin-generic',
+		null
+	);
+
+}
+add_action( 'admin_menu', 'ajax_admin_add_toplevel_menu' );
+
+Because we are targeting public facing pages, we must define the Ajax URL. For admin facing implementations the Ajax URL was added automatically by WordPress on all pages in the admin area. But for public facing pages, we need to define this value ourselves. 
+We do this with the two highlighted lines.
+ First, we define the admin URL and then we add it to the inline script here. 
+
+
+// enqueue scripts
+function ajax_public_enqueue_scripts( $hook ) {
+
+	// define script url
+	$script_url = plugins_url( '/ajax-public.js', __FILE__ );
+
+	// enqueue script
+	wp_enqueue_script( 'ajax-public', $script_url, array( 'jquery' ) );
+
+	// create nonce
+	$nonce = wp_create_nonce( 'ajax_public' );
+
+	// define ajax url
+	$ajax_url = admin_url( 'admin-ajax.php' ); // this is a WP core file for running AJAX pithing wp_admin directory
+
+	// define script
+	$script = array( 'nonce' => $nonce, 'ajaxurl' => $ajax_url );
+
+	// localize script
+	wp_localize_script( 'ajax-public', 'ajax_public', $script );
+
+}
+add_action( 'wp_enqueue_scripts', 'ajax_public_enqueue_scripts' );
+
+The next important change is the action hook that is used for the Ajax handler function. The first hook we use is for logged in users. It is prefixed by wp_ajax_. For public facing Ajax, we add another hook for users who are not logged in. 
+
+// process ajax request
+function ajax_public_handler() {
+
+	// check nonce
+	check_ajax_referer( 'ajax_public', 'nonce' );
+
+	// define author id
+	$author_id = isset( $_POST['author_id'] ) ? $_POST['author_id'] : false;
+
+	// define user description
+	$description = get_user_meta( $author_id, 'description', true );
+
+	// output results
+	echo esc_html( $description );
+
+	// end processing
+	wp_die();
+
+}
+// ajax hook for logged-in users: wp_ajax_{action}
+add_action( 'wp_ajax_public_hook', 'ajax_public_handler' );
+
+// ajax hook for non-logged-in users: wp_ajax_nopriv_{action}
+add_action( 'wp_ajax_nopriv_public_hook', 'ajax_public_handler' );
+
+So we need both of these hooks to do Ajax on public-facing pages. With both of these hooks we ensure that all users can use the public facing Ajax functionality.  Again we are checking the $_POST global object for values and performing an AJAX request using those values.
+
+Add one more thing to note, our third function in this plug-in displays the markup required to display a learn more link for each post. 
+
+// display markup
+function ajax_public_display_markup( $content ) {
+
+	if ( ! is_single() ) return $content;
+	$id = get_the_author_meta( 'ID' );
+	$url = get_author_posts_url( $id );
+	$markup  = '<p class="ajax-learn-more">';
+	$markup .= '<a href="'. $url .'" data-id="'. $id .'">';
+	$markup .= 'Learn more about the author</a></p>';
+	$markup .= '<div class="ajax-response"></div>';
+	return $content . $markup;
+}
+add_action( 'the_content', 'ajax_public_display_markup' );
+
+
+
+Find out how to display posts written by a single author with AJAX
