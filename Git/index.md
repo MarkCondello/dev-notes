@@ -40,3 +40,11 @@ git branch -M main
 git remote add origin <REMOTE_URL/>
 git push -u origin main
 ```
+
+
+## Git flow
+Start git flow:
+```git flow init```
+
+Run through the questionare and set the branch name:
+```git flow feature start NAME_OF_BRANCH```
