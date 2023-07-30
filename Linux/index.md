@@ -158,7 +158,13 @@ x = execute
 RWX = 4 + 2 + 1 = 7
 File permissions are written in octal notation. Combinations of 4, 2 and 1.
 File permissions are assigned by triplet values RWX-RWX-RWX. These are often represented in octal notation 777
-These triplet combinations are associated for 3 groups: Users Owners and Others.
+After the first character, which indicates the file type, comes 9 characters which represent the file's permissions. Eg `-rw-r--r--`
+
+These triplet combinations are associated for 3 groups: Owners Users and Others.
+The first triplet shows the owner permissions, the second one the group permissions, and the last triplet shows everybody else’s permissions.
+
+The permissions for each class are always represented in a precise order: read, write and execute.
+
 More details about the various combinations can be found here: 
 https://en.wikipedia.org/wiki/File-system_permissions#Symbolic_notation
  
