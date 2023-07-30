@@ -6,3 +6,9 @@ chmod -R 775 *
 ```
 
 (More details about this here.)[https://kb.iu.edu/d/abdb]
+
+
+## Zip up files from a Mac on Linux system
+```
+zip -vr folder.zip folder/ -x "*.DS_Store"
+```

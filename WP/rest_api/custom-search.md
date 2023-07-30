@@ -19,7 +19,7 @@ A working example can be found below:
 });
 
 A more completed version which uses conditional logic for queries with no results is below. This version uses a relative url using wp_localize_script values (uniData.root_url) added in functions.php
-//more details on localise script can be found here: https://developer.wordpress.org/reference/functions/wp_localize_script/ This function create a javascript variable in the DOM for use to retrieve key value pairs from.
+//more details on localise script can be found here: https://developer.wordpress.org/reference/functions/wp_localize_script/ This function create a javascript variable in the DOM to retrieve key value pairs from.
 
         $.getJSON(uniData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val(), (posts) => {
 //bind function to the class using es6 arrow function
@@ -63,7 +63,7 @@ Query’s .then() method waits till all the requests are completed so we can pro
         });
 The a request will return data to the one parameter in the then() method, while the b request will return data to the two parameter.
 The real code example can be found below:
-    getResults(){  
+    getResults(){
         $.when(
             $.getJSON(uniData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()), 
             $.getJSON(uniData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())
