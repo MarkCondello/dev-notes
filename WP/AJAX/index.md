@@ -110,7 +110,7 @@ Then in the JS, we grab the data attributes and append those values to a FormDat
     })
   }
 ```
-
+*For some unknown reason, the `fetch()` JS api does not work properly when making requests*
 
 ## ANOTHER EXAMPLE OF AJAX in WP
 
@@ -222,7 +222,7 @@ function ajax_public_enqueue_scripts( $hook ) {
 	$nonce = wp_create_nonce( 'ajax_public' );
 
 	// define ajax url
-	$ajax_url = admin_url( 'admin-ajax.php' ); // this is a WP core file for running AJAX pithing wp_admin directory
+	$ajax_url = admin_url( 'admin-ajax.php' ); // this is a WP core file for running AJAX path within the wp_admin directory
 
 	// define script
 	$script = array( 'nonce' => $nonce, 'ajaxurl' => $ajax_url );
@@ -263,7 +263,7 @@ add_action( 'wp_ajax_public_hook', 'ajax_public_handler' );
 add_action( 'wp_ajax_nopriv_public_hook', 'ajax_public_handler' );
 ```
 
-So we need both of these hooks to do Ajax on public-facing pages. With both of these hooks we ensure that all users can use the public facing Ajax functionality.  Again we are checking the $_POST global object for values and performing an AJAX request using those values.
+So we need both of these hooks to do Ajax on public-facing pages. With both of these hooks we ensure that all users can use the public facing Ajax functionality. Again we are checking the $_POST global object for values and performing an AJAX request using those values.
 
 Add one more thing to note, our third function in this plug-in displays the markup required to display a learn more link for each post.
 

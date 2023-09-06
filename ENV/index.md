@@ -12,3 +12,16 @@ chmod -R 775 *
 ```
 zip -vr folder.zip folder/ -x "*.DS_Store"
 ```
+
+
+## Hosts file
+We can point an ip address to a specific domain by updating the hosts file. On Mac it is located in `/etc/hosts`
+An example is below:
+```
+20.211.192.185 ipa.com.au
+20.211.192.185 www.ipa.com.au
+```
+
+Once the IP / Domain settings have beed added, we need to flush the domain cache.
+
+`sudo killall -HUP mDNSResponder`
