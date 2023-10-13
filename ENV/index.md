@@ -25,3 +25,7 @@ An example is below:
 Once the IP / Domain settings have beed added, we need to flush the domain cache.
 
 `sudo killall -HUP mDNSResponder`
+
+
+## Symlinks
+`ln -s /path/to/source/directory /path/to/destination/symlink`
