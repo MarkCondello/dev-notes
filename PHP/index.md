@@ -7,3 +7,27 @@ When using namespacing, every class referenced in a namespaces class will assume
 To include those classes, the `use CLASSNAME;` keywork is added.
 
 ## Autoloading with Composer
+Leveraging Composers autoloader is a best practice for loading namespaces throughout an application. More details (here)[https://laracasts.com/series/php-for-beginners-2023-edition/episodes/47].
+
+By including the following script in the root composer.json, we can references namespaced classes:
+```
+ "autoload": {
+        "psr-4": {
+            "Core": "Core/"
+        }
+    }
+```
+
+Running a composer dump-autoload will produce an error:  A non-empty PSR-4 prefix must end with a namespace separator.  
+Including following backslashes will fix the issue:
+```
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/"
+        }
+    }
+```
+
+Then from the main entry point of the application, include the psr4 autoload.php file from vendor like so:require `BASE_PATH . 'vendor/autoload.php';`
+
+Ensure that you reference the base path if the entry point file is not in the root.
