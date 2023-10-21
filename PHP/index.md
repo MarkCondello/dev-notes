@@ -31,3 +31,10 @@ Including following backslashes will fix the issue:
 Then from the main entry point of the application, include the psr4 autoload.php file from vendor like so:require `BASE_PATH . 'vendor/autoload.php';`
 
 Ensure that you reference the base path if the entry point file is not in the root.
+
+
+### Composer search
+
+Rather than going online to packagist and searching for packages, we can use the following command in the terminal to search for packages:
+
+`composer search KEYWORK`
