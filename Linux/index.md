@@ -119,6 +119,8 @@ groupdel group_name
  
 # displaying all groups
 cat /etc/groups
+*OR*
+cat /etc/group
  
 # displaying the groups a user belongs to
 groups
@@ -126,6 +128,8 @@ groups
 # creating admin users
 # add the user to sudo group in Ubuntu and wheel group in CentOS
 usermod -aG sudo john
+
+*Group membership does not apply until you log out and log back in.*
  
 ## Monitoring Users ##
 who -H # => displays logged in users
@@ -247,7 +251,6 @@ stat projects/
 chmod 2750 projects/
 chmod g+s projects/
  
- 
 ## The Sticky Bit
  
 # displaying the sticky bit permission
@@ -354,3 +357,16 @@ alias rm="rm -i"
 # This may look a bit confusing, but essentially, 
 # it makes all of the other aliases you define function correctly when used with sudo 
 alias sudo='sudo '      # use single quotes, not double quotes.
+
+## Editing sudoers
+[This video explains details to update the sudoers file.](https://www.youtube.com/watch?v=07JOqKOBRnU&t=23s)
+
+Critically editing this file should only be done using sudo visudo. This opens a editor used for editing this file. The editor will prompt you if there are any errors while editing.
+The editor will print `What now?` if there is an error.
+We can choose `e` to edit the file to fix any errors.
+
+## Monitor system resources
+[This video explains details about htop.](https://www.youtube.com/watch?v=tU9cO9FwDx0)
+We can actually use the mouse in the GUI to interact with htop.
+We can search for processes by name and by the user who runs a process too.
+There are facilities to modify what is displayed as well as the colour scheme.
