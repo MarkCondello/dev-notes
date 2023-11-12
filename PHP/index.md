@@ -1,10 +1,12 @@
-
 ## Namespacing
 Namespacing can be set up for related code which is usually in the same directory. The namespaced name usually is the name of the directory.
-
 When using namespacing, every class referenced in a namespaces class will assume to be loaded h=through its own namespace.
-
 To include those classes, the `use CLASSNAME;` keywork is added.
+
+More details about namespacing can be found (here)[https://www.daggerhartlab.com/autoloading-namespaces-in-php/].
+
+## loading PHP files into a browser
+`php -S localhost:8000`
 
 ## Autoloading with Composer
 Leveraging Composers autoloader is a best practice for loading namespaces throughout an application. More details (here)[https://laracasts.com/series/php-for-beginners-2023-edition/episodes/47].
