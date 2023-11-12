@@ -370,3 +370,24 @@ We can choose `e` to edit the file to fix any errors.
 We can actually use the mouse in the GUI to interact with htop.
 We can search for processes by name and by the user who runs a process too.
 There are facilities to modify what is displayed as well as the colour scheme.
+
+
+## PS command
+The ps command shows the status of active processes during a session.
+
+When running ps the following columns are shown:
+- PID = process id
+- TTY = terminal used to run the process
+- TIME = time the CPU takes to run the process 
+- CMD = the command running as part of the process
+
+We can also run:
+`ps -aux` OR `ps aux`
+
+To show all processes running by the current user run `ps -x`.
+
+Processes started by the system (not the user) are designated with a ? In the TTY column
+
+Variations of the ps command:
+- `ps -He`
+- `ps -axjf`
