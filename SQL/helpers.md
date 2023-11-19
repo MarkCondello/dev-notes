@@ -1,5 +1,9 @@
 ## Helpers
 
+## Add mysql to PATH
+`echo 'export PATH="/usr/local/mysql/bin:$PATH"' >> ~/.zshrc`
+*Replace .zshrc with the profile you want to use*
+
 ### Importing using MAMP
 /applications/MAMP/library/bin/mysql -u root -p aus-galleries < ./wwwaust2_australiangallerieswp_DUMP.sql
 
