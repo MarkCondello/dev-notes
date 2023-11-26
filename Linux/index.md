@@ -90,17 +90,20 @@ tree -f .           # => prints absolute paths
 # /etc/shadow # => users' passwords
 # /etc/group # => groups
  
-# creating a user account
+# (creating a user account)[https://www.youtube.com/watch?v=p8QOnty6rSU&list=PLT98CRl2KxKHKd_tH3ssq0HPrThx2hESW&index=2]
 useradd [OPTIONS] username
 # OPTIONS:
-# -m => create home directory
+# -m => creates a home directory
 # -d directory => specify another home directory
 # -c "comment"
 # -s shell
 # -G => specify the secondary groups (must exist)
 # -g => specify the primary group (must exist)
  
-Example:
+Simple Example:
+```useradd -m username```
+
+Complex Example:
 ```useradd -m -d /home/john -c "C++ Developer" -s /bin/bash -G sudo,adm,mail john```
  
 # changing a user account
@@ -143,6 +146,23 @@ uptime
 # printing information about the logins and logouts of the users
 last
 last -u username
+
+## setting expirations for user account settings with `chage`
+The -E sets an expiration date for an account
+``chage -E 2023-11-27 expiring-account``
+
+The -M sets an expiration for a password to an account. The number is the amount of days until the password expires.
+Undoing this can be done by using a -1 value.
+``chage -M 5 some-account``
+
+Setting a minimum number of days between password changes.
+``chage -m 7 some-account``
+
+Lock a user account
+``passwd -l account-to-lock``
+
+Unlock a user account
+``passwd -u account-to-lock``
 
 ##########################
 ## File Permissions
