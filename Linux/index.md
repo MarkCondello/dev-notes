@@ -411,3 +411,15 @@ Processes started by the system (not the user) are designated with a ? In the TT
 Variations of the ps command:
 - `ps -He`
 - `ps -axjf`
+
+## (bg) Backgrounding & (fg) Foregrounding
+Maybe we need to run a htop to see the services running and which process is consuming too much resources.
+If we need to run another task in while htop is running, we can run the command `cntl z`. This will put htop in the background and allow us to interact with bash.
+When we want to go back to htop, we can run `fg` or foreground to view it again.
+
+If we want to add a command to the background run it and add an anpersand like so:
+```SOME COMMAND &```
+
+If you have more than one process running in the background, we can see them by running `jobs`.
+We can selectively bring a job to the foreground by referencing its id found in the `jobs` list.
+```fg <ID OF A JOB />```
