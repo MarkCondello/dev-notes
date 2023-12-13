@@ -20,8 +20,7 @@ By including the following script in the root composer.json, we can references n
     }
 ```
 
-Running a composer dump-autoload will produce an error:  A non-empty PSR-4 prefix must end with a namespace separator.  
-Including following backslashes will fix the issue:
+Running a composer dump-autoload will produce an error: A non-empty PSR-4 prefix must end with a namespace separator. Including following backslashes will fix the issue:
 ```
     "autoload": {
         "psr-4": {
@@ -31,9 +30,10 @@ Including following backslashes will fix the issue:
 ```
 
 Then from the main entry point of the application, include the psr4 autoload.php file from vendor like so:require `BASE_PATH . 'vendor/autoload.php';`
+If we dont have an entry point, we can add the autoload.php file using a relative path in the file where we want to `use` a namespaced file.
+Remember to update the `psr-4` mapping so the namespace is registered with the composer `autoload_psr4.php` file.
 
 Ensure that you reference the base path if the entry point file is not in the root.
-
 
 ### Composer search
 
