@@ -345,18 +345,18 @@ chattr +-attribute filename     # => Ex: sudo chattr +i report.txt
 ##########################
 ## Bash Aliases
 ##########################
- 
+
 # listing all Aliases
 alias
- 
+
 # creating an alias:  alias_name="command"
 alias copy="cp -i"
- 
+
 # to make the aliases you define persistent, add them to ~/.bashrc
- 
+
 # removing an alias: unalias alias_name
 unalias copy
- 
+
 ## Useful Aliases ##
 alias c="clear"
 alias cl="clear;ls;pwd"
@@ -367,32 +367,43 @@ alias my_server="ssh -p 3245-l user100 80.0.0.1"
 alias update=”sudo apt update && sudo apt dist-upgrade -y && sudo apt clean”
 alias lt="ls -hSF --size -1"
 alias ping='ping -c 5'
- 
+
 # Interactive File Manipulation
 alias cp="cp -i"
 alias mv="mv -i"
 alias rm="rm -i"
- 
+
 ## Important alias ##
-# This may look a bit confusing, but essentially, 
+# This may look a bit confusing, but essentially,
 # it makes all of the other aliases you define function correctly when used with sudo 
 alias sudo='sudo '      # use single quotes, not double quotes.
 
-## Editing sudoers
+## Helpful aliases ##
+`alias mount="mount | column -t"`
+`alias i="sudo apt install"`
+`alias update="sudo apt update && sudo apt dist-upgrade"`
+// find the first 5 processes using the most memory
+`alias mem5="ps auxf | sort -nr -k 4 | head -5"`
+// find the first 5 processes using the most cpu
+`alias cpu5="ps auxf | sort -nr -k 3 | head -5"`
+
+
+[This video explains aliases.](https://www.youtube.com/watch?v=Ok_kD_sgNcs&list=PLT98CRl2KxKHKd_tH3ssq0HPrThx2hESW&index=9)
+
+# Editing sudoers
 [This video explains details to update the sudoers file.](https://www.youtube.com/watch?v=07JOqKOBRnU&t=23s)
 
 Critically editing this file should only be done using sudo visudo. This opens a editor used for editing this file. The editor will prompt you if there are any errors while editing.
 The editor will print `What now?` if there is an error.
 We can choose `e` to edit the file to fix any errors.
 
-## Monitor system resources
+# Monitor system resources
 [This video explains details about htop.](https://www.youtube.com/watch?v=tU9cO9FwDx0)
 We can actually use the mouse in the GUI to interact with htop.
 We can search for processes by name and by the user who runs a process too.
 There are facilities to modify what is displayed as well as the colour scheme.
 
-
-## PS command
+# PS command
 The ps command shows the status of active processes during a session.
 
 When running ps the following columns are shown:
