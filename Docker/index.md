@@ -29,7 +29,7 @@
 
 The idea of docker compose is to create a docker-compose.yml file and then run it.
 Inside the docker-compose.yml file you can define the images, ports, volumes, and other parameters.
-It creates a docker network and then creates the containers. this way you can have multiple containers running in the same network.
+It creates a docker network and then creates the containers. This way you can have multiple containers running in the same network.
 
 ## Docker compose commands
 
@@ -56,7 +56,8 @@ then to clean up volumes (Getting rid of the volumes will lose data. eg local da
 
 `docker volume prune`
 
-### Install ubuntu image
+
+### Installing an ubuntu image
 `docker run -dit -p <LOCAL_PORT>:80 ubuntu:22.04`
 
 Go to docker desktop, open Containers > name of container > exec then choose open in terminal.
@@ -92,18 +93,18 @@ Check composer is running:
 
 ## Install MySQL
 Install the mysql module:
-`apt-install mysql-server`
+`apt install mysql-server`
 
 Start the MySQL server:
 `/etc/init.d/mysql start`
 
-Update root user pw:
+Update root user pw after opening mysql:
 ```
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'qwertyqwerty’;
+mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by "qwertyqwerty";
 exit
 ```
 Run the secure MySQL module:
-
 `mysql_secure_installation`
 
 Login with the root user using the password we defined previously:
