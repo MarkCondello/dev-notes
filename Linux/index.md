@@ -322,22 +322,22 @@ We can copy permissions from one file to another using the following command
 chmod —reference FILE_TO_COPY.ext FILE_TO_UPDATE.ext
 
 Permissions on a parent directory are more important than a files permissions. IE if a parent dir has RWX and a file within that dir will has no permissions, it will still be readable, writable or exexucatable / deletable.
- 
+
 # changing the owner
 chown new_owner file/directory      # => Ex: sudo chown john a.txt
- 
+
 # changing the group owner
 chgrp new_group file/directory
- 
+
 # changing both the owner and the group owner
 chown new_owner:new_group file/directory
- 
+
 # changing recursively the owner or the group owner
 chown -R new-owner file/directory
- 
+
 # displaying the file attributes
 lsattr filename
- 
+
 #changing the file attributes
 chattr +-attribute filename     # => Ex: sudo chattr +i report.txt
 
