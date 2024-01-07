@@ -387,7 +387,6 @@ alias sudo='sudo '      # use single quotes, not double quotes.
 // find the first 5 processes using the most cpu
 `alias cpu5="ps auxf | sort -nr -k 3 | head -5"`
 
-
 [This video explains aliases.](https://www.youtube.com/watch?v=Ok_kD_sgNcs&list=PLT98CRl2KxKHKd_tH3ssq0HPrThx2hESW&index=9)
 
 # Editing sudoers
