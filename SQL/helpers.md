@@ -15,5 +15,8 @@
 
 /Applications/MAMP/library/bin/mysqldump -u root -p sigma-healthcare <> ./sigma_wp_staging.sql
 
-## LOCK TABLES
+## Lock tables
 If there is an issue with uploading a database due to `LOCK TABLES`; comment out the `UNLOCK TABLES` and the `LOCK TABLES` scripts.
+
+## Add Mysql to $PATH
+`echo 'export PATH="/usr/local/mysql/bin:$PATH"' >> ~/.bash_profile`
