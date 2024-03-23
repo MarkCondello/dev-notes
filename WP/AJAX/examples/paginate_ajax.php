@@ -161,7 +161,6 @@ add_filter('yk_custom_get_posts_response_post', 'yk_include_custom_filters');
 add_filter('yk_custom_get_posts_response_client', 'yk_include_custom_filters');
 ?>
 <!-- Pagination js -->
-
 const $resultWrap = $('ul.result-wrap'),
 $loadNextPage = $('.js-ajax-load-next-page')
 
