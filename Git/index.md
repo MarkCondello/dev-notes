@@ -10,18 +10,19 @@ Provide the current path and ssh file name.
 Enter file in which to save the key (/Users/markcondello/.ssh/id_rsa): /Users/markcondello/.ssh/id_rsa_agency_gh
 
 Copy the public key and add it to GitHub:
-`cat id_rsa_agency_gh.pub`
+`pbcop < ./id_rsa_agency_gh.pub`
 
 Register the private ssh key in the local machine.
 `ssh-add /Users/markcondello/.ssh/id_rsa_agency_gh`
 
-Add a reference to the ssh key in the config file
+Add a reference to the ssh key in a `config` file like so:
 ```
 ## Work github account
 Host github.com-markcond
   HostName github.com
   User git
   IdentityFile ~/.ssh/id_rsa_agency_gh
+  IdentitiesOnly yes
 ```
 
 When cloning, remember to add the custom Host text eg github.com-markcond after the @ symbol
