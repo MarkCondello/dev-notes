@@ -25,7 +25,7 @@ Host github.com-markcond
   IdentitiesOnly yes
 ```
 
-When cloning, remember to add the custom Host text eg github.com-markcond after the @ symbol
+When cloning, remember to add the custom Host text eg github.com-markcond after the `@` symbol
 `git clone git@github.com-markcond:AGENCY/sass-lib.git`
 
 [Video with details here.](https://www.youtube.com/watch?v=ap56ivm0dhw)
