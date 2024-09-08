@@ -5,7 +5,7 @@ chown -R www-data:www-data *
 chmod -R 775 *
 ```
 
-(More details about this here.)[https://kb.iu.edu/d/abdb]
+[More details about this here.](https://kb.iu.edu/d/abdb)
 
 ## Zip up files from a Mac on Linux system
 ```
@@ -27,7 +27,7 @@ Once the IP / Domain settings have beed added, we need to flush the domain cache
 `ln -s /path/to/source/directory /path/to/destination/symlink`
 
 ## CRON jobs
-A detailed video about how to use and setup cron jobs can be found (here)[https://www.youtube.com/watch?v=7cbP7fzn0D8].
+A detailed video about how to use and setup cron jobs can be found [here](https://www.youtube.com/watch?v=7cbP7fzn0D8).
 
 When editing the `crontab -e`, there are comments relating to how to schedule a cron. See below:
 ```
@@ -45,12 +45,12 @@ Its not recommended to run cron jobs from a generic user. The best way is to spe
 
 * Important: A full path to the executable script should be added as some users may not have access to services and files.
 
-(This site)[https://crontab-generator.org/] generates the crontab schedule by using the interface.
+[This site](https://crontab-generator.org/) generates the crontab schedule by using the interface.
 
 ## Apache server setup
-`.conf` settings can be found (here)[https://www.udemy.com/course/master-linux-administration/learn/lecture/23099810#overview]
+`.conf` settings can be found [here](https://www.udemy.com/course/master-linux-administration/learn/lecture/23099810#overview)
 
-SSL settings found (here)[https://www.udemy.com/course/master-linux-administration/learn/lecture/23099822#overview]
+SSL settings found [here](https://www.udemy.com/course/master-linux-administration/learn/lecture/23099822#overview)
 
 Install the certificate package:
 `apt update && apt install certbot python3-certbot-apache`

@@ -1,13 +1,13 @@
 <?php
 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-$grid_settings = array(
-    'args'    => array(
-        'post_type'      => 'team',
+$grid_settings = [
+    'args' => [
+        'post_type' => 'team',
         'posts_per_page' => 3,
-        'orderby'        => 'date',
-        'order'          => 'ASC'
-    ),
-);
+        'orderby' => 'date',
+        'order' => 'ASC'
+    ],
+];
 $the_query = sgy_get_posts($grid_settings['args']);
 ?>
 <form>
