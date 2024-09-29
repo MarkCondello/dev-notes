@@ -50,3 +50,10 @@ Run through the questionare and set the branch name:
 ## Setup remote for deployment
 A useful workflow is to deply changes from a specific branch to a server.
 Details on the setup by using the `post-receive git hook` and the server remote can be found (here)[https://gist.github.com/nonbeing/f3441c96d8577a734fa240039b7113db].
+
+
+## Connect to remote repo
+Details from github are (here)[https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories].
+
+## Test ssh connection
+`ssh -Tv git@github.com`

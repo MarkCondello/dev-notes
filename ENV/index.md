@@ -105,3 +105,26 @@ Unzip the file like so:
 `tar -xzvf latest.tar.gz`
 
 And move the folder to the document root.
+
+## Show reserved ports
+`less /etc/services`
+
+## Auto update shell packages
+`sudo apt install unattended-upgrades`
+Then run the package:
+`sudo dpkg-reconfigure --priority=low unattended-upgrade`
+The low priority means it will only run when the server is not doing many processes.
+
+## Bash scripting
+`|` can be used to pass the output of one command as input to another.
+eg: `ls | grep '.jpg'` will list jpeg files using ls and grep combined with the pipe.
+`content > FILENAME` will add content to a file
+`more content >> FILENAME` will append content to a file
+
+`2>&1` will redirect standard input
+
+## Find files
+`find /var/log -type f -name "*.log"`
+
+## Find directories
+`sudo find / -type d  -name log`

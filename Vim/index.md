@@ -95,3 +95,7 @@ The above macro will be displayed similar to this:
 We can yank into a register by adding `"<SOME_CHARACTER />` and then `yy`
 
 Helpful details on how to use a register can be found [here](https://stackoverflow.com/questions/1497958/how-do-i-use-vim-registers).
+
+## Save a read only file
+`:w !sudo tee %`
+Run file as sudo, `tee` reads from standard input and adds it to standard output. `%` is the filename itself.
