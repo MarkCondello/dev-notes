@@ -1,0 +1,5 @@
+For the node install, choose a more latest release from the available versions here:
+https://github.com/nodesource/distributions?tab=readme-ov-file#ubuntu-versions
+
+Run the command (like in the screenshot) but with the updated Node version:
+

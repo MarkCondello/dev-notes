@@ -1,0 +1,13 @@
+After step 2 run:
+nginx -t
+
+To do a diagnostic on the configuration.
+A dialogue should be shown saying there are duplicate default server settings for 0.0.0.0:80.
+
+This then takes us to step 4, where we disable to default virtual host settings to fix this issue.
+
+
+After step 4, we need to start the node app.
+From /var/www/app run 
+node index.js
+

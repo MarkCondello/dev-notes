@@ -1,0 +1,28 @@
+Nmap and closing ports
+We install nmap to know which ports are open to the public.
+After running nmap against the servers IP we can see the port which Node uses to run the application is open.
+
+This port is open by default because the Node server opened it.
+
+UFW - uncomplicated firewall
+This package can be used to block ports and services.
+There are 3 options, allow, deny and reject.
+Deny will provide a feedback while reject will fail silently.
+
+After completing step 2, add an explicit rule to close the port which Node uses. Eg:
+sudo ufw deny 4000
+
+
+Step 3 - Unattended upgrades
+https://www.kolide.com/features/checks/ubuntu-unattended-upgrades
+
+sudo dpkg-reconfigure --priority=low unattended-upgrades
+
+The priority flag has low, medium, high and critical options. Low means that the installations will continue with questions which are answered by default settings. Whereas critical has questions which need specific answers.
+
+
+FilePermissions
+We should always try to apply the least amount of permissions to files hosted on a server.
+This resource is helpful with applying chmod rules:
+https://quickref.me/chmod#google_vignette
+

@@ -1,0 +1,42 @@
+I instead of doing a
+`node index.js`
+Which only launches the node application while the users session in the server is active, we can add the pm2 package which persists the node state (its a process manager) even after a users session in the server is finished.
+
+https://www.npmjs.com/package/pm2
+
+
+Git integration
+From within the ~/.ssh directory, generate a new ssh key:
+ssh-keygen
+
+From within Git > Settings > SSH and GPG keys add the Public key content.
+
+Update the ./ssh/config file:
+
+Host github.com
+Hostname github.com
+IdentityFile ~/.ssh/gh_private_key
+
+Navigate back to the app directory and ensure the correct remote is set:
+git remote -v
+
+To test git connection through SSH run:
+ssh -Tv git@github.com
+
+Pull the latest code from the main branch:
+git pull origin main
+
+
+Add htpassword
+https://www.digitalocean.com/community/tutorials/how-to-set-up-password-authentication-with-nginx-on-ubuntu-14-04
+
+sudo sh -c "echo -n 'NAME:' >> /etc/nginx/.htpasswd"
+sudo sh -c "openssl passwd PASSWORD >> /etc/nginx/.htpasswd"
+
+
+Add the following lines to the location block on the virtual host file:
+
+location {
+        auth_basic "Restricted Content";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+}
