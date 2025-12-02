@@ -10,7 +10,7 @@ Provide the current path and ssh file name.
 Enter file in which to save the key (/Users/markcondello/.ssh/id_rsa): /Users/markcondello/.ssh/id_rsa_agency_gh
 
 Copy the public key and add it to GitHub:
-`pbcop < ./id_rsa_agency_gh.pub`
+`pbcopy < ./id_rsa_agency_gh.pub`
 
 Register the private ssh key in the local machine.
 `ssh-add /Users/markcondello/.ssh/id_rsa_agency_gh`
